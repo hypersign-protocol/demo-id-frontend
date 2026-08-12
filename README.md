@@ -139,7 +139,11 @@ Steps:
 2. Open the GitHub repository settings.
 3. Go to `Pages`.
 4. Set the source to `GitHub Actions`.
-5. Push to `main` or `develop`, or run the `Deploy GitHub Pages` workflow manually.
+5. Push to `main` to deploy, or push to `develop` to run test/build checks without deploying.
+
+The workflow also uses `actions/configure-pages` with `enablement: true`, so it can enable GitHub Pages for the repository when permissions allow it. If the workflow still reports `Get Pages site failed`, enable Pages manually from `Settings -> Pages -> Source: GitHub Actions`, then rerun the workflow.
+
+Deployment is restricted to the `main` branch. The workflow may run on `develop`, but the deploy job is skipped there to avoid GitHub Pages environment protection errors.
 
 After GitHub Pages finishes deploying, the app should be available at:
 
