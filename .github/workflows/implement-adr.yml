@@ -55,8 +55,8 @@ jobs:
             --yes \
             --no-auto-commits \
             --read "docs/adr/$ADR_FILENAME" \
-            --message "Implement all features and requirements specified in docs/adr/$ADR_FILENAME. Create the new use case HTML and assets under usecases/, wire up the widget integration logic matching existing patterns, and update src/App.vue." \
-            usecases/ src/ config.js index.html
+            --message "Analyze and implement all requirements, specifications, and tasks defined in docs/adr/$ADR_FILENAME. Update existing code, add unit tests, or create new files as requested by the document." \
+            src/ usecases/ tests/ config.js index.html
 
       - name: Create Pull Request to develop
         uses: peter-evans/create-pull-request@v6
