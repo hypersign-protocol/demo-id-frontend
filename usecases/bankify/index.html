@@ -1,60 +1,894 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bankify Use Case</title>
+    <title>Bankify Customer Onboarding</title>
     <script src="../../config.js"></script>
     <style>
-        body {
-            background-color: #121212;
-            color: #ffffff;
-            font-family: Arial, sans-serif;
+        :root {
+            --bg: #03070d;
+            --panel: #0a111d;
+            --panel-soft: #101a2a;
+            --line: rgba(148, 180, 224, 0.18);
+            --ink: #f1f7ff;
+            --muted: #9fb0c6;
+            --accent: #4cc9a7;
+            --accent-strong: #7ddfcb;
+            --warn: #f0bf62;
+            --danger: #ee7878;
+            --shadow: rgba(0, 0, 0, 0.34);
         }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background:
+                linear-gradient(120deg, rgba(76, 201, 167, 0.16), transparent 28%),
+                linear-gradient(250deg, rgba(98, 132, 202, 0.18), transparent 30%),
+                linear-gradient(180deg, #03070d 0%, #070d17 54%, #03070d 100%);
+            color: var(--ink);
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            line-height: 1.5;
+            margin: 0;
+            min-height: 100vh;
+        }
+
+        button,
+        input {
+            font: inherit;
+        }
+
+        button:disabled {
+            cursor: not-allowed;
+            opacity: 0.65;
+        }
+
         .hidden {
-            display: none;
+            display: none !important;
+        }
+
+        .app-shell {
+            margin: 0 auto;
+            max-width: 1180px;
+            padding: 24px;
+        }
+
+        .topbar {
+            align-items: center;
+            display: flex;
+            gap: 16px;
+            justify-content: space-between;
+            margin-bottom: 28px;
+        }
+
+        .brand-lockup {
+            align-items: center;
+            display: flex;
+            gap: 12px;
+        }
+
+        .brand-logo {
+            background: #06101a;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            display: block;
+            height: 54px;
+            object-fit: contain;
+            padding: 4px;
+            width: 54px;
+        }
+
+        .brand-name {
+            font-size: 1.35rem;
+            font-weight: 900;
+            letter-spacing: 0;
+            line-height: 1;
+            margin: 0;
+        }
+
+        .brand-subtitle,
+        .muted {
+            color: var(--muted);
+        }
+
+        .brand-subtitle {
+            font-size: 0.88rem;
+            margin: 4px 0 0;
+        }
+
+        .trust-pill {
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            color: var(--accent-strong);
+            font-size: 0.88rem;
+            font-weight: 800;
+            padding: 9px 12px;
+        }
+
+        .onboarding-grid,
+        .verified-grid {
+            align-items: start;
+            display: grid;
+            gap: 18px;
+            grid-template-columns: minmax(0, 1fr) 380px;
+        }
+
+        .hero-copy {
+            align-content: center;
+            min-height: 260px;
+            padding: 8px 0 24px;
+        }
+
+        .eyebrow {
+            color: var(--accent-strong);
+            font-size: 0.8rem;
+            font-weight: 900;
+            letter-spacing: 0.08em;
+            margin: 0 0 10px;
+            text-transform: uppercase;
+        }
+
+        h1,
+        h2,
+        h3,
+        p {
+            margin-top: 0;
+        }
+
+        h1 {
+            font-size: clamp(2.2rem, 5vw, 4.9rem);
+            font-weight: 900;
+            letter-spacing: 0;
+            line-height: 0.95;
+            margin-bottom: 18px;
+            max-width: 780px;
+        }
+
+        h2 {
+            font-size: 1.35rem;
+            margin-bottom: 8px;
+        }
+
+        h3 {
+            font-size: 1rem;
+            margin-bottom: 10px;
+        }
+
+        .hero-copy .muted {
+            font-size: 1.05rem;
+            max-width: 620px;
+        }
+
+        .panel,
+        .widget-panel,
+        .account-card,
+        .transaction-panel {
+            background: rgba(10, 17, 29, 0.94);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            box-shadow: 0 20px 54px var(--shadow);
+        }
+
+        .panel {
+            padding: 20px;
+        }
+
+        .field-grid {
+            display: grid;
+            gap: 14px;
+            margin: 18px 0;
+        }
+
+        label {
+            color: var(--muted);
+            display: block;
+            font-size: 0.88rem;
+            font-weight: 800;
+            margin-bottom: 7px;
+        }
+
+        input {
+            background: #060d17;
+            border: 1px solid rgba(148, 180, 224, 0.22);
+            border-radius: 8px;
+            color: var(--ink);
+            outline: none;
+            padding: 12px 13px;
+            width: 100%;
+        }
+
+        input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px rgba(76, 201, 167, 0.14);
+        }
+
+        input::placeholder {
+            color: rgba(241, 247, 255, 0.34);
+        }
+
+        .button-row {
+            align-items: center;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .btn {
+            align-items: center;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            cursor: pointer;
+            display: inline-flex;
+            font-weight: 900;
+            justify-content: center;
+            min-height: 46px;
+            padding: 11px 15px;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #03120e;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-strong);
+            border-color: var(--accent-strong);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border-color: rgba(241, 247, 255, 0.24);
+            color: var(--ink);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(241, 247, 255, 0.08);
+        }
+
+        .status-box {
+            background: var(--panel-soft);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            color: var(--muted);
+            margin-top: 16px;
+            min-height: 48px;
+            padding: 12px;
+        }
+
+        .status-box.success {
+            background: rgba(76, 201, 167, 0.1);
+            border-color: rgba(76, 201, 167, 0.38);
+            color: var(--accent-strong);
+        }
+
+        .status-box.error {
+            background: rgba(238, 120, 120, 0.1);
+            border-color: rgba(238, 120, 120, 0.34);
+            color: var(--danger);
+        }
+
+        .security-list {
+            display: grid;
+            gap: 10px;
+            margin: 18px 0 0;
+            padding: 0;
+        }
+
+        .security-list li {
+            align-items: center;
+            background: rgba(241, 247, 255, 0.04);
+            border: 1px solid rgba(148, 180, 224, 0.12);
+            border-radius: 8px;
+            color: var(--muted);
+            display: flex;
+            gap: 10px;
+            list-style: none;
+            padding: 10px 12px;
+        }
+
+        .security-list li::before {
+            background: var(--accent);
+            border-radius: 999px;
+            content: "";
+            flex: 0 0 8px;
+            height: 8px;
+            width: 8px;
+        }
+
+        .widget-panel {
+            overflow: hidden;
+        }
+
+        .widget-panel-header {
+            align-items: center;
+            border-bottom: 1px solid var(--line);
+            display: flex;
+            gap: 12px;
+            justify-content: space-between;
+            padding: 14px 16px;
+        }
+
+        .widget-panel-header h2 {
+            font-size: 1rem;
+            margin: 0;
+        }
+
+        .widget-frame-wrap {
+            background: #050a12;
+            height: min(760px, calc(100vh - 180px));
+            min-height: 620px;
+        }
+
+        .widget-frame {
+            border: 0;
+            height: 100%;
+            width: 100%;
+        }
+
+        .widget-placeholder {
+            align-items: center;
+            background: linear-gradient(135deg, rgba(76, 201, 167, 0.14), rgba(5, 10, 18, 0.92));
+            color: var(--muted);
+            display: flex;
+            font-weight: 700;
+            height: 100%;
+            justify-content: center;
+            padding: 22px;
+            text-align: center;
+        }
+
+        .button-loader {
+            align-items: center;
+            display: inline-flex;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .button-loader::before {
+            animation: spin 0.8s linear infinite;
+            border: 2px solid rgba(3, 18, 14, 0.28);
+            border-radius: 50%;
+            border-top-color: #03120e;
+            content: "";
+            height: 14px;
+            width: 14px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .dashboard-header {
+            align-items: end;
+            display: flex;
+            gap: 16px;
+            justify-content: space-between;
+            margin-bottom: 18px;
+        }
+
+        .account-card {
+            background:
+                linear-gradient(135deg, rgba(76, 201, 167, 0.24), rgba(98, 132, 202, 0.18)),
+                #0a111d;
+            padding: 22px;
+        }
+
+        .balance-label {
+            color: var(--muted);
+            font-size: 0.85rem;
+            font-weight: 900;
+            text-transform: uppercase;
+        }
+
+        .balance {
+            font-size: clamp(2.3rem, 5vw, 4rem);
+            font-weight: 900;
+            letter-spacing: 0;
+            line-height: 1;
+            margin: 8px 0 18px;
+        }
+
+        .account-meta {
+            display: grid;
+            gap: 10px;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .metric {
+            background: rgba(3, 7, 13, 0.42);
+            border: 1px solid rgba(241, 247, 255, 0.12);
+            border-radius: 8px;
+            padding: 12px;
+        }
+
+        .metric span {
+            color: var(--muted);
+            display: block;
+            font-size: 0.78rem;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+
+        .metric strong {
+            font-size: 0.98rem;
+        }
+
+        .transaction-panel {
+            padding: 18px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th,
+        td {
+            border-bottom: 1px solid var(--line);
+            padding: 13px 10px;
+            text-align: left;
+        }
+
+        th {
+            color: var(--muted);
+            font-size: 0.78rem;
+            text-transform: uppercase;
+        }
+
+        td:last-child,
+        th:last-child {
+            text-align: right;
+        }
+
+        .credit {
+            color: var(--accent-strong);
+            font-weight: 900;
+        }
+
+        .debit {
+            color: #f3d18a;
+            font-weight: 900;
+        }
+
+        @media (max-width: 920px) {
+
+            .onboarding-grid,
+            .verified-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .app-shell {
+                padding: 18px;
+            }
+
+            .topbar,
+            .dashboard-header {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .account-meta {
+                grid-template-columns: 1fr;
+            }
+
+            th,
+            td {
+                padding: 11px 6px;
+            }
         }
     </style>
 </head>
+
 <body>
-    <h1>Welcome to Bankify</h1>
-    <section id="onboarding-form">
-        <label for="input-name">Name:</label>
-        <input type="text" id="input-name" required>
-        <label for="input-email">Email:</label>
-        <input type="email" id="input-email" required>
-        <button id="btn-verify">Verify Identity with Hypersign</button>
-    </section>
-    <section id="dashboard-view" class="hidden">
-        <h2>Welcome, <span id="user-name"></span></h2>
-        <p>Balance: $12,450.00</p>
-        <table>
-            <tr><th>Date</th><th>Description</th><th>Amount</th></tr>
-            <tr><td>01/01/2026</td><td>Salary</td><td>$5,000.00</td></tr>
-            <tr><td>01/05/2026</td><td>Coffee Shop</td><td>-$15.00</td></tr>
-            <tr><td>01/10/2026</td><td>Online Transfer</td><td>-$200.00</td></tr>
-        </table>
-    </section>
+    <main class="app-shell">
+        <header class="topbar">
+            <div class="brand-lockup">
+                <img class="brand-logo" src="assets/logo.png" alt="Bankify">
+                <div>
+                    <p class="brand-name">Bankify</p>
+                    <p class="brand-subtitle">Digital banking onboarding</p>
+                </div>
+            </div>
+            <div class="trust-pill">Hypersign ID KYC</div>
+        </header>
+
+        <section id="onboarding-form" class="onboarding-grid">
+            <div class="hero-copy">
+                <p class="eyebrow">Open your account</p>
+                <h1>Start banking with verified identity.</h1>
+                <p class="muted">Create your Bankify profile and complete secure KYC before your demo dashboard is
+                    unlocked.</p>
+            </div>
+
+            <aside class="panel" aria-label="Customer onboarding form">
+                <h2>Customer Details</h2>
+                <p class="muted">Your account is activated after Hypersign ID verification.</p>
+                <div class="field-grid">
+                    <div>
+                        <label for="input-name">Name</label>
+                        <input id="input-name" type="text" autocomplete="name" placeholder="Ava Sharma" required>
+                    </div>
+                    <div>
+                        <label for="input-email">Email</label>
+                        <input id="input-email" type="email" autocomplete="email" placeholder="ava@example.com"
+                            required>
+                    </div>
+                </div>
+                <div class="button-row">
+                    <button id="btn-verify" class="btn btn-primary" type="button">Verify Identity with
+                        Hypersign</button>
+                    <button id="btn-restart" class="btn btn-secondary hidden" type="button">Restart Session</button>
+                </div>
+                <div id="kyc-status" class="status-box">Enter your details to start KYC.</div>
+                <ul class="security-list" aria-label="Bankify onboarding security">
+                    <li>Identity proof is requested through the Hypersign widget.</li>
+                    <li>Bankify receives only the verification result for this demo.</li>
+                    <li>Your dashboard opens after successful KYC.</li>
+                </ul>
+            </aside>
+        </section>
+
+        <section id="widget-section" class="widget-panel hidden" aria-label="Identity verification widget">
+            <div class="widget-panel-header">
+                <h2>Hypersign ID</h2>
+                <span class="muted">KYC verification</span>
+            </div>
+            <div id="kyc-widget-frame-wrap" class="widget-frame-wrap">
+                <div id="kyc-widget-placeholder" class="widget-placeholder">Your identity verification will appear here.
+                </div>
+                <iframe id="kyc-widget-frame" class="widget-frame hidden" title="Hypersign ID Widget"
+                    allow="camera; microphone; fullscreen; clipboard-read; clipboard-write"></iframe>
+            </div>
+        </section>
+
+        <section id="dashboard-view" class="hidden" aria-label="Bankify account dashboard">
+            <div class="dashboard-header">
+                <div>
+                    <p class="eyebrow">Verified Account</p>
+                    <h1 id="welcome-message">Welcome, Customer</h1>
+                </div>
+                <button id="btn-new-customer" class="btn btn-secondary" type="button">New Customer</button>
+            </div>
+
+            <div class="verified-grid">
+                <section class="account-card" aria-label="Account balance">
+                    <div class="balance-label">Available Balance</div>
+                    <div class="balance">$12,450.00</div>
+                    <div class="account-meta">
+                        <div class="metric">
+                            <span>Account</span>
+                            <strong>Everyday Checking</strong>
+                        </div>
+                        <div class="metric">
+                            <span>Status</span>
+                            <strong>KYC Verified</strong>
+                        </div>
+                        <div class="metric">
+                            <span>Routing</span>
+                            <strong>082-451</strong>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="transaction-panel" aria-label="Recent transactions">
+                    <h2>Recent Transactions</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Description</th>
+                                <th>Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Aug 10</td>
+                                <td>Salary</td>
+                                <td class="credit">+$5,000.00</td>
+                            </tr>
+                            <tr>
+                                <td>Aug 11</td>
+                                <td>Coffee Shop</td>
+                                <td class="debit">-$15.00</td>
+                            </tr>
+                            <tr>
+                                <td>Aug 12</td>
+                                <td>Online Transfer</td>
+                                <td class="debit">-$200.00</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+        </section>
+    </main>
+
     <script>
         const demoIdConfig = window.DEMO_ID_CONFIG || {};
-        const btnVerify = document.getElementById('btn-verify');
-        const onboardingForm = document.getElementById('onboarding-form');
-        const dashboardView = document.getElementById('dashboard-view');
-        const userNameSpan = document.getElementById('user-name');
+        const state = {
+            widgetUrl: demoIdConfig.widgetUrl || "https://verify.hypersign.id",
+            demoIdBackendBaseURL: demoIdConfig.demoIdBackendBaseURL || "http://localhost:3007",
+            tokens: {
+                kycAdmin: "",
+                ssiAdmin: "",
+                userBearer: ""
+            },
+            sessionId: "",
+            customer: {
+                name: "",
+                email: ""
+            },
+            verified: false,
+            widgetActive: false
+        };
 
-        btnVerify.addEventListener('click', () => {
-            const name = document.getElementById('input-name').value;
-            const email = document.getElementById('input-email').value;
+        const onboardingForm = document.getElementById("onboarding-form");
+        const dashboardView = document.getElementById("dashboard-view");
+        const widgetSection = document.getElementById("widget-section");
+        const widgetFrame = document.getElementById("kyc-widget-frame");
+        const widgetPlaceholder = document.getElementById("kyc-widget-placeholder");
+        const verifyBtn = document.getElementById("btn-verify");
+        const restartBtn = document.getElementById("btn-restart");
+        const statusBox = document.getElementById("kyc-status");
+        const welcomeMessage = document.getElementById("welcome-message");
 
-            if (name && email) {
-                // Simulate verification success
-                userNameSpan.textContent = name;
-                onboardingForm.classList.add('hidden');
-                dashboardView.classList.remove('hidden');
-            } else {
-                alert('Please enter your name and email.');
+        window.addEventListener("message", handleWidgetMessage);
+        verifyBtn.addEventListener("click", startIdentityVerification);
+        restartBtn.addEventListener("click", restartVerificationSession);
+        document.getElementById("btn-new-customer").addEventListener("click", resetOnboarding);
+
+        async function startIdentityVerification() {
+            const name = document.getElementById("input-name").value.trim();
+            const email = document.getElementById("input-email").value.trim();
+
+            if (!name || !email) {
+                setKycStatus("Enter your name and email before verification.", "error");
+                return;
             }
-        });
+
+            setButtonLoading(verifyBtn, true, "Preparing...");
+            restartBtn.classList.add("hidden");
+
+            try {
+                await refreshVerificationSession(name, email);
+                resetWidgetFrame();
+                openIdentityVerification();
+            } catch (error) {
+                setKycStatus(error.message, "error");
+                alert(`Verification Setup Error: ${error.message}`);
+            } finally {
+                setButtonLoading(verifyBtn, false);
+                if (state.widgetActive) verifyBtn.disabled = true;
+            }
+        }
+
+        async function refreshVerificationSession(name, email) {
+            const response = await fetch(`${state.demoIdBackendBaseURL}/get-required-tokens-and-session-for-a-user`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ name, email })
+            });
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || data.message || "Could not start ID verification.");
+            }
+
+            state.tokens.kycAdmin = data.kycAdminToken;
+            state.tokens.ssiAdmin = data.ssiAdminToken;
+            state.tokens.userBearer = data.kycUserAccessToken || data.userBearerToken;
+            state.sessionId = data.sessionId;
+            state.widgetUrl = normalizeWidgetUrl(data.widgetUrl || state.widgetUrl);
+            state.customer.name = name;
+            state.customer.email = email;
+            state.verified = false;
+        }
+
+        async function restartVerificationSession() {
+            const name = state.customer.name || document.getElementById("input-name").value.trim();
+            const email = state.customer.email || document.getElementById("input-email").value.trim();
+
+            if (!name || !email) {
+                setKycStatus("Enter your details before restarting verification.", "error");
+                return;
+            }
+
+            resetWidgetFrame();
+            setButtonLoading(restartBtn, true, "Restarting...");
+            verifyBtn.disabled = true;
+            setKycStatus("Requesting a new verification session...", "");
+
+            try {
+                await refreshVerificationSession(name, email);
+                restartBtn.classList.add("hidden");
+                openIdentityVerification();
+            } catch (error) {
+                setKycStatus(error.message, "error");
+                restartBtn.classList.remove("hidden");
+            } finally {
+                setButtonLoading(restartBtn, false);
+                verifyBtn.disabled = state.widgetActive;
+            }
+        }
+
+        function openIdentityVerification() {
+            if (!state.sessionId || !state.tokens.userBearer) {
+                setKycStatus("Enter your details before ID verification.", "error");
+                return;
+            }
+
+            const targetUrl = buildWidgetUrl();
+            widgetSection.classList.remove("hidden");
+            widgetPlaceholder.classList.add("hidden");
+            widgetFrame.src = targetUrl;
+            widgetFrame.classList.remove("hidden");
+            state.widgetActive = true;
+            verifyBtn.disabled = true;
+            restartBtn.classList.add("hidden");
+            setKycStatus("Complete verification in the Hypersign panel.", "");
+        }
+
+        function handleWidgetMessage(event) {
+            if (!state.widgetUrl) return;
+
+            const fromEmbeddedWidget = widgetFrame.contentWindow && event.source === widgetFrame.contentWindow;
+            if (!fromEmbeddedWidget) return;
+
+            const expectedOrigin = new URL(state.widgetUrl, window.location.origin).origin;
+            if (event.origin !== expectedOrigin) return;
+
+            try {
+                const payload = parseWidgetPayload(event.data);
+                const { status, message, code } = payload;
+
+                if (status === "success" && code === "VERIFICATION_SUCCESS") {
+                    markIdentityVerified(message || "ID verification completed.");
+                    return;
+                }
+
+                if (status === "error") {
+                    showVerificationFailure(code, message);
+                    return;
+                }
+
+                showVerificationFailure(code, message || "Unknown widget response.");
+            } catch (error) {
+                showVerificationFailure("", "Could not read the widget response.");
+            }
+        }
+
+        function markIdentityVerified(message) {
+            state.verified = true;
+            state.widgetActive = false;
+            resetWidgetFrame();
+            widgetSection.classList.add("hidden");
+            verifyBtn.disabled = true;
+            verifyBtn.innerText = "ID Verified";
+            restartBtn.classList.add("hidden");
+            setKycStatus(message, "success");
+            showDashboard();
+        }
+
+        function showVerificationFailure(code, message) {
+            state.widgetActive = false;
+            resetWidgetFrame();
+            setKycStatus(message || getKycErrorMessage(code), "error");
+            verifyBtn.disabled = false;
+            restartBtn.classList.remove("hidden");
+        }
+
+        function parseWidgetPayload(data) {
+            if (typeof data === "string") {
+                return JSON.parse(data);
+            }
+
+            return data || {};
+        }
+
+        function getKycErrorMessage(code) {
+            switch (code) {
+                case "SESSION_EXPIRED":
+                    return "Verification session expired. Restart the session and try again.";
+                case "ACCESS_TOKEN_EXPIRED":
+                    return "Verification tokens expired. Restart the session and try again.";
+                case "LIVELINESS_VERIFICATION_FAILED":
+                    return "Biometric validation failed. Restart the session and try again.";
+                case "DOCUMENT_VERIFICATION_FAILED":
+                    return "Document verification failed. Restart the session and try again.";
+                case "ZK_PROOF_GENERATION_FAILED":
+                    return "Proof generation failed. Restart the session and try again.";
+                default:
+                    return "ID verification failed.";
+            }
+        }
+
+        function buildWidgetUrl() {
+            const url = new URL(normalizeWidgetUrl(state.widgetUrl), window.location.origin);
+            url.searchParams.set("kycAccessToken", state.tokens.kycAdmin);
+            url.searchParams.set("ssiAccessToken", state.tokens.ssiAdmin);
+            url.searchParams.set("sessionId", state.sessionId);
+            url.searchParams.set("kycUserAccessToken", state.tokens.userBearer);
+            return url.toString();
+        }
+
+        function normalizeWidgetUrl(value) {
+            const normalizedUrl = (value || "").trim();
+
+            if (normalizedUrl.startsWith("http://verify.hypersign.id")) {
+                return normalizedUrl.replace(/^http:\/\//, "https://");
+            }
+
+            return normalizedUrl;
+        }
+
+        function showDashboard() {
+            onboardingForm.classList.add("hidden");
+            widgetSection.classList.add("hidden");
+            welcomeMessage.innerText = `Welcome, ${state.customer.name}`;
+            dashboardView.classList.remove("hidden");
+        }
+
+        function resetOnboarding() {
+            state.tokens.kycAdmin = "";
+            state.tokens.ssiAdmin = "";
+            state.tokens.userBearer = "";
+            state.sessionId = "";
+            state.customer.name = "";
+            state.customer.email = "";
+            state.verified = false;
+            state.widgetActive = false;
+            resetWidgetFrame();
+
+            document.getElementById("input-name").value = "";
+            document.getElementById("input-email").value = "";
+            verifyBtn.disabled = false;
+            verifyBtn.innerText = "Verify Identity with Hypersign";
+            restartBtn.classList.add("hidden");
+            setKycStatus("Enter your details to start KYC.", "");
+            dashboardView.classList.add("hidden");
+            onboardingForm.classList.remove("hidden");
+        }
+
+        function resetWidgetFrame() {
+            state.widgetActive = false;
+            widgetFrame.removeAttribute("src");
+            widgetFrame.classList.add("hidden");
+            widgetPlaceholder.classList.remove("hidden");
+        }
+
+        function setKycStatus(message, type) {
+            statusBox.innerText = message;
+            statusBox.className = "status-box";
+            if (type) statusBox.classList.add(type);
+        }
+
+        function setButtonLoading(button, isLoading, loadingText) {
+            if (!button) return;
+
+            if (isLoading) {
+                if (!button.dataset.defaultText) {
+                    button.dataset.defaultText = button.innerText;
+                }
+                button.disabled = true;
+                button.innerHTML = `<span class="button-loader">${loadingText || button.innerText}</span>`;
+                return;
+            }
+
+            button.disabled = false;
+            button.innerText = button.dataset.defaultText || button.innerText;
+        }
     </script>
 </body>
+
 </html>
