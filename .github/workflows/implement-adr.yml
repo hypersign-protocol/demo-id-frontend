@@ -3,6 +3,15 @@ name: Implement ADR
 on:
   repository_dispatch:
     types: [implement-adr]
+  workflow_dispatch:
+    inputs:
+      adr_filename:
+        description: 'ADR Filename'
+        required: true
+        default: '0001-example-adr.md'
+      adr_content:
+        description: 'ADR Content'
+        required: true
 
 jobs:
   implement:
