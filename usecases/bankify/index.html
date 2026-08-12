@@ -4,9 +4,57 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bankify Use Case</title>
+    <script src="../../config.js"></script>
+    <style>
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
 </head>
 <body>
     <h1>Welcome to Bankify</h1>
-    <p>This is the Bankify use case page.</p>
+    <section id="onboarding-form">
+        <label for="input-name">Name:</label>
+        <input type="text" id="input-name" required>
+        <label for="input-email">Email:</label>
+        <input type="email" id="input-email" required>
+        <button id="btn-verify">Verify Identity with Hypersign</button>
+    </section>
+    <section id="dashboard-view" class="hidden">
+        <h2>Welcome, <span id="user-name"></span></h2>
+        <p>Balance: $12,450.00</p>
+        <table>
+            <tr><th>Date</th><th>Description</th><th>Amount</th></tr>
+            <tr><td>01/01/2026</td><td>Salary</td><td>$5,000.00</td></tr>
+            <tr><td>01/05/2026</td><td>Coffee Shop</td><td>-$15.00</td></tr>
+            <tr><td>01/10/2026</td><td>Online Transfer</td><td>-$200.00</td></tr>
+        </table>
+    </section>
+    <script>
+        const demoIdConfig = window.DEMO_ID_CONFIG || {};
+        const btnVerify = document.getElementById('btn-verify');
+        const onboardingForm = document.getElementById('onboarding-form');
+        const dashboardView = document.getElementById('dashboard-view');
+        const userNameSpan = document.getElementById('user-name');
+
+        btnVerify.addEventListener('click', () => {
+            const name = document.getElementById('input-name').value;
+            const email = document.getElementById('input-email').value;
+
+            if (name && email) {
+                // Simulate verification success
+                userNameSpan.textContent = name;
+                onboardingForm.classList.add('hidden');
+                dashboardView.classList.remove('hidden');
+            } else {
+                alert('Please enter your name and email.');
+            }
+        });
+    </script>
 </body>
 </html>
