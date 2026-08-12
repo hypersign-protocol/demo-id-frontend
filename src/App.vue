@@ -57,6 +57,12 @@ const usecases = [
     summary: "Identity-gated exchange trading demo.",
     logo: `${basePath}usecases/nuvex/assets/logo.png`,
   },
+  {
+    name: "Bankify",
+    slug: "bankify",
+    summary: "Short description of the banking use case.",
+    logo: `${basePath}usecases/bankify/assets/logo.png`,
+  },
 ].map((usecase) => ({
   ...usecase,
   href: `${basePath}usecases/${usecase.slug}/`,

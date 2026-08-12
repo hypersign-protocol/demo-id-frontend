@@ -8,4 +8,5 @@ test("project has required entry files", () => {
   assert.equal(existsSync("config.js"), true);
   assert.equal(existsSync("usecases/beerkart/index.html"), true);
   assert.equal(existsSync("usecases/nuvex/index.html"), true);
+  assert.equal(existsSync("usecases/bankify/index.html"), true);
 });
