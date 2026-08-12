@@ -51,7 +51,12 @@ jobs:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           ADR_FILENAME: ${{ github.event.client_payload.adr_filename || inputs.adr_filename }}
         run: |
-          aider --architect --yes --message "Implement the architectural changes specified in docs/adr/$ADR_FILENAME"
+          aider \
+            --yes \
+            --no-auto-commits \
+            --read "docs/adr/$ADR_FILENAME" \
+            --message "Implement all features and requirements specified in docs/adr/$ADR_FILENAME. Create the new use case HTML and assets under usecases/, wire up the widget integration logic matching existing patterns, and update src/App.vue." \
+            usecases/ src/ config.js index.html
 
       - name: Create Pull Request to develop
         uses: peter-evans/create-pull-request@v6
