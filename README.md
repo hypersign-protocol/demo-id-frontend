@@ -1,52 +1,88 @@
 # Demo ID Frontend
 
-Static frontend for listing ID demo use cases.
+Vue 3 frontend for listing ID demo use cases.
 
 The root page lists all available use cases and links to each demo folder:
 
 ```text
-http://127.0.0.1:5500/demo-id-frontend/
-http://127.0.0.1:5500/demo-id-frontend/beerkart/
-http://127.0.0.1:5500/demo-id-frontend/nuvex/
+http://127.0.0.1:5173/demo-id-frontend/
+http://127.0.0.1:5173/demo-id-frontend/usecases/beerkart/
+http://127.0.0.1:5173/demo-id-frontend/usecases/nuvex/
 ```
 
 ## 1. Running The App
 
-This project is static. It does not need `npm install` or a build command.
-
-Start a static server from the parent directory of this repo:
+Install dependencies:
 
 ```bash
-cd /Users/hermit/code/learn/ai-assistent-setup
-python3 -m http.server 5500 --bind 127.0.0.1
+npm install
+```
+
+Start the Vite development server:
+
+```bash
+npm run dev
+```
+
+Open:
+
+```text
+http://127.0.0.1:5173/demo-id-frontend/
+```
+
+The app is configured with the `/demo-id-frontend/` base path so local Vite URLs match GitHub Pages project URLs.
+
+Build the deployable app:
+
+```bash
+npm run build
+```
+
+Run the smoke tests:
+
+```bash
+npm run test
+```
+
+The output is created in:
+
+```text
+dist/
+```
+
+Preview the built output locally:
+
+```bash
+npm run preview
 ```
 
 Then open:
 
 ```text
-http://127.0.0.1:5500/demo-id-frontend/
+http://127.0.0.1:4173/demo-id-frontend/
 ```
 
-Important: run the server from the parent directory, not from inside `demo-id-frontend`, because the app is expected to be served under the `/demo-id-frontend/` path.
+The build process copies the static use case folders and shared config into `dist`.
 
 ## 2. Adding A New Use Case
 
-Create a new folder inside this repo. Each use case should have its own folder with an `index.html` file.
+Create a new folder inside `usecases`. Each use case should have its own folder with an `index.html` file.
 
 Example:
 
 ```text
 demo-id-frontend/
-  mydemo/
-    index.html
-    assets/
-      logo.png
+  usecases/
+    mydemo/
+      index.html
+      assets/
+        logo.png
 ```
 
 If the use case needs the shared ID configuration, load the root config before the use case script:
 
 ```html
-<script src="../config.js"></script>
+<script src="../../config.js"></script>
 <script>
     const demoIdConfig = window.DEMO_ID_CONFIG || {};
 
@@ -57,27 +93,27 @@ If the use case needs the shared ID configuration, load the root config before t
 </script>
 ```
 
-Then add the use case to the `usecases` array in `index.html`:
+Then add the use case to the `usecases` array in `src/App.vue`:
 
 ```js
 {
-    name: "My Demo",
-    slug: "mydemo",
-    summary: "Short description of this ID use case.",
-    logo: `${basePath}mydemo/assets/logo.png`,
+  name: "My Demo",
+  slug: "mydemo",
+  summary: "Short description of this ID use case.",
+  logo: `${basePath}usecases/mydemo/assets/logo.png`,
 }
 ```
 
 After this, the root page will show the new use case:
 
 ```text
-http://127.0.0.1:5500/demo-id-frontend/
+http://127.0.0.1:5173/demo-id-frontend/
 ```
 
 The new demo will be available at:
 
 ```text
-http://127.0.0.1:5500/demo-id-frontend/mydemo/
+http://127.0.0.1:5173/demo-id-frontend/usecases/mydemo/
 ```
 
 ## Shared Configuration
@@ -95,16 +131,15 @@ Update this file when the widget URL or backend URL changes. Existing use cases 
 
 ## 3. Deploying On GitHub Pages
 
-This repo is ready for GitHub Pages because it is a static app.
+This repo includes a GitHub Actions workflow at `.github/workflows/deploy-pages.yml`.
 
 Steps:
 
 1. Push this repo to GitHub.
 2. Open the GitHub repository settings.
 3. Go to `Pages`.
-4. Set the source to the branch you want to publish, usually `main`.
-5. Set the folder to `/root`.
-6. Save the settings.
+4. Set the source to `GitHub Actions`.
+5. Push to `main` or `develop`, or run the `Deploy GitHub Pages` workflow manually.
 
 After GitHub Pages finishes deploying, the app should be available at:
 
@@ -115,8 +150,18 @@ https://<owner>.github.io/demo-id-frontend/
 The use case links will follow the same path:
 
 ```text
-https://<owner>.github.io/demo-id-frontend/beerkart/
-https://<owner>.github.io/demo-id-frontend/nuvex/
+https://<owner>.github.io/demo-id-frontend/usecases/beerkart/
+https://<owner>.github.io/demo-id-frontend/usecases/nuvex/
 ```
 
-The `.nojekyll` file is included so GitHub Pages serves the static files directly.
+The workflow runs:
+
+```bash
+npm ci
+npm run test
+npm run build
+```
+
+Then it deploys the `dist` folder to GitHub Pages.
+
+The `.nojekyll` file is copied into `dist` so GitHub Pages serves the static files directly.
