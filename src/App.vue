@@ -60,7 +60,7 @@ const usecases = [
   {
     name: "Bankify",
     slug: "bankify",
-    summary: "Short description of the banking use case.",
+    summary: "KYC customer onboarding for digital banking using Hypersign ID.",
     logo: `${basePath}usecases/bankify/assets/logo.png`,
   },
 ].map((usecase) => ({
