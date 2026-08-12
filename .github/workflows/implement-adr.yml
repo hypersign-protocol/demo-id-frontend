@@ -51,15 +51,14 @@ jobs:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           ADR_FILENAME: ${{ github.event.client_payload.adr_filename || inputs.adr_filename }}
         run: |
-          # Dynamically collect all existing project source files while ignoring git/node_modules
+          # Pass existing project files to Aider
           FILES=$(find src usecases config.js index.html -type f 2>/dev/null | tr '\n' ' ')
 
           aider \
             --yes \
             --no-auto-commits \
-            --read "docs/adr/$ADR_FILENAME" \
-            --message "Analyze and implement all requirements, specifications, and tasks defined in docs/adr/$ADR_FILENAME. Update existing code, add unit tests, or create new files as requested by the document." \
-            $FILES
+            --message "Read docs/adr/$ADR_FILENAME carefully. Implement all architectural and technical specifications listed in it. You MUST edit existing files or create any missing new files (e.g. under usecases/ or src/) required by the ADR specs." \
+            "docs/adr/$ADR_FILENAME" $FILES
 
       - name: Create Pull Request to develop
         uses: peter-evans/create-pull-request@v6
