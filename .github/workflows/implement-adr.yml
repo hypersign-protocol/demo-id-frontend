@@ -51,14 +51,15 @@ jobs:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           ADR_FILENAME: ${{ github.event.client_payload.adr_filename || inputs.adr_filename }}
         run: |
-          # Pass existing project files to Aider
-          FILES=$(find src usecases config.js index.html -type f 2>/dev/null | tr '\n' ' ')
-
           aider \
             --yes \
             --no-auto-commits \
-            --message "Read docs/adr/$ADR_FILENAME carefully. Implement all architectural and technical specifications listed in it. You MUST edit existing files or create any missing new files (e.g. under usecases/ or src/) required by the ADR specs." \
-            "docs/adr/$ADR_FILENAME" $FILES
+            --architect \
+            --model gpt-4o \
+            --editor-model gpt-4o-mini \
+            --map-tokens 2000 \
+            --message "Read docs/adr/$ADR_FILENAME carefully. Identify all affected modules and files across the repository. Implement all technical specifications detailed in the document, creating new files or editing existing ones as needed." \
+            "docs/adr/$ADR_FILENAME"
 
       - name: Create Pull Request to develop
         uses: peter-evans/create-pull-request@v6
