@@ -8,6 +8,7 @@ The root page lists all available use cases and links to each demo folder:
 http://127.0.0.1:5173/demo-id-frontend/
 http://127.0.0.1:5173/demo-id-frontend/usecases/beerkart/
 http://127.0.0.1:5173/demo-id-frontend/usecases/nuvex/
+http://127.0.0.1:5173/demo-id-frontend/usecases/bankify/
 ```
 
 ## 1. Running The App
