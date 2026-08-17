@@ -1012,6 +1012,7 @@
             }
 
             updateStepper(state.sessionId ? "id" : "basic");
+            openIdVerificationOnStepLoad();
         }
 
         async function prepareVerificationSession() {
@@ -1028,6 +1029,7 @@
                 updateStepper("id");
                 setIdStatus("Verification session is ready.", "");
                 resetIdActionButtons();
+                openIdVerificationOnStepLoad();
             } catch (error) {
                 setIdStatus(error.message, "error");
                 alert(`Verification Setup Error: ${error.message}`);
@@ -1081,6 +1083,7 @@
                 updateStepper("id");
                 resetIdActionButtons();
                 setIdStatus("New verification session is ready.", "success");
+                openIdVerificationOnStepLoad();
             } catch (error) {
                 setIdStatus(error.message, "error");
                 restartSessionBtn.classList.remove("hidden");
@@ -1103,6 +1106,11 @@
             verifyIdBtn.disabled = true;
             restartSessionBtn.classList.add("hidden");
             setIdStatus("Complete verification in the Hypersign panel.", "");
+        }
+
+        function openIdVerificationOnStepLoad() {
+            if (!state.sessionId || state.verified || idWidgetFrame.getAttribute("src")) return;
+            openIdVerification();
         }
 
         function handleWidgetMessage(event) {

@@ -880,6 +880,7 @@
             }
 
             updateCheckoutStep(verificationState.sessionId ? "age" : "basic");
+            openAgeVerificationOnStepLoad();
         }
 
         async function prepareVerificationSession() {
@@ -899,6 +900,7 @@
                 updateCheckoutStep("age");
                 setAgeStatus("Verification session is ready.", "");
                 resetAgeActionButtons();
+                openAgeVerificationOnStepLoad();
             } catch (error) {
                 setAgeStatus(error.message, "error");
                 alert(`Verification Setup Error: ${error.message}`);
@@ -955,6 +957,7 @@
                 updateCheckoutStep("age");
                 resetAgeActionButtons();
                 setAgeStatus("New verification session is ready.", "success");
+                openAgeVerificationOnStepLoad();
             } catch (error) {
                 setAgeStatus(error.message, "error");
                 restartSessionBtn.classList.remove("hidden");
@@ -980,6 +983,11 @@
             retryAgeBtn.classList.add("hidden");
             restartSessionBtn.classList.add("hidden");
             setAgeStatus("Complete the age check in the Hypersign panel.", "");
+        }
+
+        function openAgeVerificationOnStepLoad() {
+            if (!verificationState.sessionId || verificationState.verified || ageWidgetFrame.getAttribute("src")) return;
+            openAgeVerification();
         }
 
         function handleWidgetMessage(event) {
