@@ -61,10 +61,11 @@ jobs:
           docker run --rm \
             -e LLM_API_KEY="$LLM_API_KEY" \
             -e LLM_MODEL="$LLM_MODEL" \
-            -v "$WORKSPACE_BASE":/workspace \
-            -w /workspace \
-            openhands/openhands:0.14 \
-            openhands --headless -f task.txt
+            -e WORKSPACE_MOUNT_PATH="$WORKSPACE_BASE" \
+            -v /var/run/docker.sock:/var/run/docker.sock \
+            -v "$WORKSPACE_BASE":/opt/workspace_base \
+            ghcr.io/all-hands-ai/openhands:main \
+            python -m openhands.core.main -t "$(cat task.txt)"
 
       - name: Create Pull Request to develop
         uses: peter-evans/create-pull-request@v6
