@@ -52,7 +52,6 @@ jobs:
           5. Ensure all code changes pass cleanly before finishing.
           EOF
 
-      # Run official OpenHands Docker container directly mounted to the repository workspace
       - name: Run OpenHands Agent Image
         env:
           LLM_API_KEY: ${{ secrets.OPENAI_API_KEY }}
@@ -62,10 +61,11 @@ jobs:
           docker run --rm \
             -e LLM_API_KEY="$LLM_API_KEY" \
             -e LLM_MODEL="$LLM_MODEL" \
-            -v "$WORKSPACE_BASE":/workspace \
-            -w /workspace \
-            docker.all-hands.dev/all-hands-ai/openhands:0.14 \
-            openhands --headless -f task.txt
+            -e WORKSPACE_MOUNT_PATH="$WORKSPACE_BASE" \
+            -v /var/run/docker.sock:/var/run/docker.sock \
+            -v "$WORKSPACE_BASE":/opt/workspace_base \
+            ghcr.io/all-hands-ai/openhands:main \
+            python -m openhands.core.main -t "$(cat task.txt)"
 
       - name: Create Pull Request to develop
         uses: peter-evans/create-pull-request@v6
