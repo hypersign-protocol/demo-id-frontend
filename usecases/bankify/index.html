@@ -183,6 +183,12 @@
             margin: 18px 0;
         }
 
+        .onboarding-action {
+            align-self: start;
+            display: grid;
+            gap: 18px;
+        }
+
         label {
             color: var(--muted);
             display: block;
@@ -484,6 +490,16 @@
             td {
                 padding: 11px 6px;
             }
+
+            .hero-copy {
+                min-height: auto;
+                padding-bottom: 8px;
+            }
+
+            .widget-frame-wrap {
+                height: calc(100vh - 180px);
+                min-height: 520px;
+            }
         }
     </style>
 </head>
@@ -509,44 +525,47 @@
                     unlocked.</p>
             </div>
 
-            <aside class="panel" aria-label="Customer onboarding form">
-                <h2>Customer Details</h2>
-                <p class="muted">Your account is activated after Hypersign ID verification.</p>
-                <div class="field-grid">
-                    <div>
-                        <label for="input-name">Name</label>
-                        <input id="input-name" type="text" autocomplete="name" placeholder="Ava Sharma" required>
+            <div class="onboarding-action">
+                <aside id="customer-details-panel" class="panel" aria-label="Customer onboarding form">
+                    <h2>Customer Details</h2>
+                    <p class="muted">Your account is activated after Hypersign ID verification.</p>
+                    <div class="field-grid">
+                        <div>
+                            <label for="input-name">Name</label>
+                            <input id="input-name" type="text" autocomplete="name" placeholder="Ava Sharma" required>
+                        </div>
+                        <div>
+                            <label for="input-email">Email</label>
+                            <input id="input-email" type="email" autocomplete="email" placeholder="ava@example.com"
+                                required>
+                        </div>
                     </div>
-                    <div>
-                        <label for="input-email">Email</label>
-                        <input id="input-email" type="email" autocomplete="email" placeholder="ava@example.com"
-                            required>
+                    <div class="button-row">
+                        <button id="btn-verify" class="btn btn-primary" type="button">Verify Identity with
+                            Hypersign</button>
+                        <button id="btn-restart" class="btn btn-secondary hidden" type="button">Restart Session</button>
                     </div>
-                </div>
-                <div class="button-row">
-                    <button id="btn-verify" class="btn btn-primary" type="button">Verify Identity with
-                        Hypersign</button>
-                    <button id="btn-restart" class="btn btn-secondary hidden" type="button">Restart Session</button>
-                </div>
-                <div id="kyc-status" class="status-box">Enter your details to start KYC.</div>
-                <ul class="security-list" aria-label="Bankify onboarding security">
-                    <li>Identity proof is requested through the Hypersign widget.</li>
-                    <li>Bankify receives only the verification result for this demo.</li>
-                    <li>Your dashboard opens after successful KYC.</li>
-                </ul>
-            </aside>
-        </section>
+                    <div id="kyc-status" class="status-box">Enter your details to start KYC.</div>
+                    <ul class="security-list" aria-label="Bankify onboarding security">
+                        <li>Identity proof is requested through the Hypersign widget.</li>
+                        <li>Bankify receives only the verification result for this demo.</li>
+                        <li>Your dashboard opens after successful KYC.</li>
+                    </ul>
+                </aside>
 
-        <section id="widget-section" class="widget-panel hidden" aria-label="Identity verification widget">
-            <div class="widget-panel-header">
-                <h2>Hypersign ID</h2>
-                <span class="muted">KYC verification</span>
-            </div>
-            <div id="kyc-widget-frame-wrap" class="widget-frame-wrap">
-                <div id="kyc-widget-placeholder" class="widget-placeholder">Your identity verification will appear here.
-                </div>
-                <iframe id="kyc-widget-frame" class="widget-frame hidden" title="Hypersign ID Widget"
-                    allow="camera; microphone; fullscreen; clipboard-read; clipboard-write"></iframe>
+                <section id="widget-section" class="widget-panel hidden" aria-label="Identity verification widget">
+                    <div class="widget-panel-header">
+                        <h2>Hypersign ID</h2>
+                        <span class="muted">KYC verification</span>
+                    </div>
+                    <div id="kyc-widget-frame-wrap" class="widget-frame-wrap">
+                        <div id="kyc-widget-placeholder" class="widget-placeholder">Your identity verification will
+                            appear here.
+                        </div>
+                        <iframe id="kyc-widget-frame" class="widget-frame hidden" title="Hypersign ID Widget"
+                            allow="camera; microphone; fullscreen; clipboard-read; clipboard-write"></iframe>
+                    </div>
+                </section>
             </div>
         </section>
 
@@ -633,6 +652,7 @@
 
         const onboardingForm = document.getElementById("onboarding-form");
         const dashboardView = document.getElementById("dashboard-view");
+        const customerDetailsPanel = document.getElementById("customer-details-panel");
         const widgetSection = document.getElementById("widget-section");
         const widgetFrame = document.getElementById("kyc-widget-frame");
         const widgetPlaceholder = document.getElementById("kyc-widget-placeholder");
@@ -729,6 +749,7 @@
             }
 
             const targetUrl = buildWidgetUrl();
+            customerDetailsPanel.classList.add("hidden");
             widgetSection.classList.remove("hidden");
             widgetPlaceholder.classList.add("hidden");
             widgetFrame.src = targetUrl;
@@ -784,6 +805,8 @@
             state.widgetActive = false;
             resetWidgetFrame();
             setKycStatus(message || getKycErrorMessage(code), "error");
+            customerDetailsPanel.classList.remove("hidden");
+            widgetSection.classList.add("hidden");
             verifyBtn.disabled = false;
             restartBtn.classList.remove("hidden");
         }
@@ -856,6 +879,8 @@
             verifyBtn.innerText = "Verify Identity with Hypersign";
             restartBtn.classList.add("hidden");
             setKycStatus("Enter your details to start KYC.", "");
+            customerDetailsPanel.classList.remove("hidden");
+            widgetSection.classList.add("hidden");
             dashboardView.classList.add("hidden");
             onboardingForm.classList.remove("hidden");
         }

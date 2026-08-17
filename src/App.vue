@@ -2,7 +2,7 @@
   <main class="app-shell">
     <header class="topbar">
       <div class="brand">
-        <h1>Demo ID Frontend</h1>
+        <h1>Hypersign.ID Demos</h1>
         <p>Available ID use cases</p>
       </div>
       <div class="repo-path">{{ displayBasePath }}</div>
