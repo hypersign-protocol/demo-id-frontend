@@ -45,11 +45,14 @@ jobs:
           ADR_FILENAME: ${{ github.event.client_payload.adr_filename || inputs.adr_filename }}
         run: |
           cat <<EOF > task.txt
-          1. Read docs/adr/$ADR_FILENAME carefully.
-          2. Inspect existing components, code structure, and styling in the repository.
-          3. Implement all technical specifications and functional logic detailed in the ADR.
-          4. Run build and test commands (e.g., npm run build, npm test) to verify execution.
-          5. Ensure all code changes pass cleanly before finishing.
+          You are tasked with implementing an Architectural Decision Record (ADR).
+
+          Instructions:
+          1. Read the ADR specifications located in docs/adr/$ADR_FILENAME.
+          2. Modify or create the necessary files in the workspace to fulfill the ADR requirements.
+          3. Keep edits minimal and focused directly on the requested ADR implementation.
+          4. Run tests or build commands if necessary to verify.
+          5. Immediately complete the task once edits are in place. Do not repeat failed commands.
           EOF
 
       - name: Run OpenHands Agent Image
@@ -57,11 +60,13 @@ jobs:
           LLM_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           LLM_MODEL: "openai/gpt-4o-mini"
           WORKSPACE_BASE: ${{ github.workspace }}
+          MAX_ITERATIONS: 15
         run: |
           docker run --rm \
             --add-host=host.docker.internal:host-gateway \
             -e LLM_API_KEY="$LLM_API_KEY" \
             -e LLM_MODEL="$LLM_MODEL" \
+            -e MAX_ITERATIONS="$MAX_ITERATIONS" \
             -e WORKSPACE_MOUNT_PATH="$WORKSPACE_BASE" \
             -e SANDBOX_USER_ID=0 \
             -v /var/run/docker.sock:/var/run/docker.sock \
