@@ -55,7 +55,7 @@ jobs:
       - name: Run OpenHands Agent Image
         env:
           LLM_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          LLM_MODEL: "openai/gpt-4o"
+          LLM_MODEL: "openai/gpt-4o-mini"
           WORKSPACE_BASE: ${{ github.workspace }}
         run: |
           docker run --rm \
