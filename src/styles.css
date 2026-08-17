@@ -121,6 +121,19 @@ a {
     #07111f;
 }
 
+.preview.bankify {
+  background:
+    linear-gradient(135deg, rgba(31, 157, 104, 0.2), transparent 46%),
+    #06101a;
+}
+
+.preview.staycheck {
+  background:
+    linear-gradient(135deg, rgba(52, 214, 179, 0.2), transparent 44%),
+    linear-gradient(315deg, rgba(245, 199, 107, 0.14), transparent 48%),
+    #030406;
+}
+
 .preview img {
   display: block;
   max-height: 82px;
