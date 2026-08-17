@@ -45,14 +45,23 @@ jobs:
           ADR_FILENAME: ${{ github.event.client_payload.adr_filename || inputs.adr_filename }}
         run: |
           cat <<EOF > task.txt
-          Your goal is to implement the specifications described in docs/adr/$ADR_FILENAME.
+          You are an expert software developer tasked with executing an Architectural Decision Record (ADR).
 
-          Instructions:
-          1. Read docs/adr/$ADR_FILENAME carefully.
-          2. Inspect existing workspace structure and modify or create necessary files.
-          3. Avoid running interactive or long-running shell commands.
-          4. Execute build or test commands to verify your implementation if required.
-          5. Call the 'finish' tool immediately once edits are saved and verified.
+          PHASE 1: ADR ANALYSIS & SCOPE IDENTIFICATION
+          1. Read and thoroughly analyze 'docs/adr/$ADR_FILENAME'.
+          2. Determine the scope of the decision (e.g., creating a new module/feature, adding unit/e2e test suites, refactoring existing code, or updating configuration/CI pipelines).
+
+          PHASE 2: REPOSITORY EXPLORATION
+          3. Explore the repository to understand existing patterns relevant to this specific task:
+             - If creating code/features: Inspect existing modules for directory conventions, architecture, and dynamic behavior.
+             - If writing tests: Inspect existing test setups, test framework configurations, directory structures, and mocking patterns.
+             - If refactoring/modifying: Inspect the target files, their dependents, and existing integration points.
+
+          PHASE 3: IMPLEMENTATION & VERIFICATION
+          4. Execute the changes described in the ADR adhering to the project's established conventions and standards.
+          5. Ensure all implementation details are fully functional—no placeholders, dummy code, or dead stubs.
+          6. Verify your work (e.g., run existing/new tests, verify syntax, ensure no broken imports) before completing.
+          7. Call the 'finish' tool once the task is complete.
           EOF
 
       - name: Run OpenHands Agent Image
