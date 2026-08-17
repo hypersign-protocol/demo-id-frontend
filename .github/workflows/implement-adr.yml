@@ -70,12 +70,15 @@ jobs:
             python -m openhands.core.main -t "$(cat task.txt)"
 
       - name: Fix workspace permissions
-        run: sudo chown -R $(whoami):$(id -ng) .
+        if: always()
+        run: |
+          sudo chown -R $(whoami):$(id -ng) .
+          rm -f task.txt
 
       - name: Create Pull Request to develop
         uses: peter-evans/create-pull-request@v6
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.MULTI_REPO_PAT }}
           branch: feat/implement-${{ github.event.client_payload.adr_filename || inputs.adr_filename }}
           base: develop
           title: "feat(adr): implement ${{ github.event.client_payload.adr_filename || inputs.adr_filename }}"
