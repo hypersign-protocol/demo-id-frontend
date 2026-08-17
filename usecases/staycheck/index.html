@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StayCheck - Hospitality and Real Estate Check-In</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <script src="../../config.js"></script>
+    <script>
+        const demoIdConfig = window.DEMO_ID_CONFIG || {};
+        const state = {
+            widgetUrl: demoIdConfig.widgetUrl || "https://verify.hypersign.id",
+            demoIdBackendBaseURL: demoIdConfig.demoIdBackendBaseURL || "http://localhost:3007",
+        };
+    </script>
+</head>
+<body>
+    <div id="property-view">
+        <h1>StayCheck</h1>
+        <p>Privacy-preserving booking and remote pre-arrival verification.</p>
+        <div class="property-grid">
+            <div class="property-card">
+                <img src="assets/property1.jpg" alt="Property 1">
+                <h2>Cozy Apartment</h2>
+                <p>Location: Downtown</p>
+                <p>Price: $120/night</p>
+                <p>Capacity: 2 guests</p>
+                <p>Short description of the property.</p>
+                <button>Select</button>
+            </div>
+            <div class="property-card">
+                <img src="assets/property2.jpg" alt="Property 2">
+                <h2>Luxury Villa</h2>
+                <p>Location: Beachside</p>
+                <p>Price: $350/night</p>
+                <p>Capacity: 8 guests</p>
+                <p>Short description of the property.</p>
+                <button>Select</button>
+            </div>
+            <div class="property-card">
+                <img src="assets/property3.jpg" alt="Property 3">
+                <h2>Modern Studio</h2>
+                <p>Location: Uptown</p>
+                <p>Price: $90/night</p>
+                <p>Capacity: 1 guest</p>
+                <p>Short description of the property.</p>
+                <button>Select</button>
+            </div>
+        </div>
+    </div>
+    <div id="booking-view" style="display:none;">
+        <h2>Booking Details</h2>
+        <p>Selected Property: <span id="selected-property"></span></p>
+        <label for="checkin-date">Check-in Date:</label>
+        <input type="date" id="checkin-date">
+        <label for="checkout-date">Check-out Date:</label>
+        <input type="date" id="checkout-date">
+        <button id="proceed-to-guest-details">Proceed to Guest Details</button>
+        <div id="reservation-summary"></div>
+    </div>
+    <div id="guest-details-view" style="display:none;">
+        <h2>Guest Details</h2>
+        <div id="reservation-summary"></div>
+        <label for="guest-name">Name:</label>
+        <input type="text" id="guest-name">
+        <label for="guest-email">Email:</label>
+        <input type="email" id="guest-email">
+        <button id="btn-start-checkin">Verify Identity with Hypersign</button>
+        <div id="checkin-status">Enter guest details to start pre-arrival verification.</div>
+    </div>
+    <div id="verification-view" style="display:none;">
+        <h2>Verification</h2>
+        <div id="staycheck-widget-panel">
+            <iframe id="staycheck-widget-frame" src="" frameborder="0"></iframe>
+        </div>
+        <p>StayCheck confirms identity credentials without storing physical ID scans in this demo.</p>
+    </div>
+    <div id="verified-view" style="display:none;">
+        <h2>Reservation Booked</h2>
+        <p>Confirmation message including guest name.</p>
+        <p>Selected property and booking date details.</p>
+        <p>Mock confirmation number, arrival instruction, or digital key readiness message.</p>
+        <button id="btn-new-checkin">Start Another Check-In</button>
+    </div>
+</body>
+</html>
