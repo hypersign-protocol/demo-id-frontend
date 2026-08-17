@@ -63,13 +63,13 @@ const usecases = [
     summary: "KYC customer onboarding for digital banking using Hypersign ID.",
     logo: `${basePath}usecases/bankify/assets/logo.png`,
   },
-].map((usecase) => ({
   {
     name: "StayCheck",
     slug: "staycheck",
     summary: "Contactless guest check-in for hospitality and real estate using Hypersign ID.",
     logo: `${basePath}usecases/staycheck/assets/logo.png`,
   },
+].map((usecase) => ({
   ...usecase,
   href: `${basePath}usecases/${usecase.slug}/`,
 }));

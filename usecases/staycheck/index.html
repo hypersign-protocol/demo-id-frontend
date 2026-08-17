@@ -1,86 +1,1198 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StayCheck - Hospitality and Real Estate Check-In</title>
-    <link rel="stylesheet" href="../../styles.css">
+    <title>StayCheck</title>
     <script src="../../config.js"></script>
+    <style>
+        :root {
+            --bg: #030406;
+            --panel: #0b0f14;
+            --panel-soft: #121821;
+            --line: rgba(232, 238, 246, 0.16);
+            --ink: #f6f1e8;
+            --muted: #a8b0bd;
+            --accent: #34d6b3;
+            --accent-2: #f5c76b;
+            --danger: #ff7d7d;
+            --shadow: rgba(0, 0, 0, 0.42);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background:
+                radial-gradient(circle at 18% 10%, rgba(52, 214, 179, 0.16), transparent 26%),
+                radial-gradient(circle at 88% 4%, rgba(245, 199, 107, 0.14), transparent 24%),
+                linear-gradient(180deg, #030406 0%, #07090d 54%, #030406 100%);
+            color: var(--ink);
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            line-height: 1.5;
+            margin: 0;
+            min-height: 100vh;
+        }
+
+        button,
+        input,
+        select {
+            font: inherit;
+        }
+
+        button:disabled {
+            cursor: not-allowed;
+            opacity: 0.65;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .app-shell {
+            margin: 0 auto;
+            max-width: 1220px;
+            padding: 24px;
+        }
+
+        .topbar,
+        .view-header,
+        .panel-header,
+        .summary-row,
+        .button-row {
+            align-items: center;
+            display: flex;
+            gap: 14px;
+        }
+
+        .topbar,
+        .view-header,
+        .panel-header,
+        .summary-row {
+            justify-content: space-between;
+        }
+
+        .topbar {
+            margin-bottom: 26px;
+        }
+
+        .brand-lockup {
+            align-items: center;
+            display: flex;
+            gap: 12px;
+        }
+
+        .brand-logo {
+            background: #05080b;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            display: block;
+            height: 56px;
+            object-fit: contain;
+            padding: 5px;
+            width: 56px;
+        }
+
+        .brand-name,
+        h1,
+        h2,
+        h3,
+        p {
+            margin-top: 0;
+        }
+
+        .brand-name {
+            font-size: 1.35rem;
+            font-weight: 950;
+            letter-spacing: 0;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .muted {
+            color: var(--muted);
+        }
+
+        .trust-pill {
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            color: var(--accent);
+            font-size: 0.86rem;
+            font-weight: 900;
+            padding: 9px 12px;
+            white-space: nowrap;
+        }
+
+        .hero {
+            display: grid;
+            gap: 22px;
+            grid-template-columns: minmax(0, 0.9fr) minmax(340px, 1.1fr);
+            margin-bottom: 22px;
+        }
+
+        .hero-copy {
+            align-content: center;
+            min-height: 320px;
+        }
+
+        .eyebrow {
+            color: var(--accent);
+            font-size: 0.78rem;
+            font-weight: 950;
+            letter-spacing: 0.08em;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            font-size: clamp(2.3rem, 5vw, 5rem);
+            font-weight: 950;
+            letter-spacing: 0;
+            line-height: 0.95;
+            margin-bottom: 18px;
+            max-width: 780px;
+        }
+
+        h2 {
+            font-size: 1.35rem;
+            margin-bottom: 8px;
+        }
+
+        h3 {
+            font-size: 1rem;
+            margin-bottom: 6px;
+        }
+
+        .hero-copy .muted {
+            font-size: 1.05rem;
+            max-width: 620px;
+        }
+
+        .hero-panel,
+        .property-card,
+        .booking-panel,
+        .guest-panel,
+        .widget-panel,
+        .confirmation-panel {
+            background: rgba(11, 15, 20, 0.94);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            box-shadow: 0 22px 54px var(--shadow);
+        }
+
+        .hero-panel {
+            min-height: 320px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .hero-suite {
+            background:
+                linear-gradient(90deg, rgba(3, 4, 6, 0.92), rgba(3, 4, 6, 0.18)),
+                linear-gradient(135deg, #151b22 0%, #2b241a 50%, #0d1718 100%);
+            inset: 0;
+            position: absolute;
+        }
+
+        .hero-suite::after {
+            background:
+                linear-gradient(90deg, rgba(246, 241, 232, 0.22) 1px, transparent 1px),
+                linear-gradient(rgba(246, 241, 232, 0.12) 1px, transparent 1px);
+            background-size: 86px 86px;
+            content: "";
+            inset: 0;
+            opacity: 0.34;
+            position: absolute;
+        }
+
+        .hero-panel-content {
+            display: grid;
+            gap: 16px;
+            inset: auto 22px 22px 22px;
+            position: absolute;
+            z-index: 1;
+        }
+
+        .hero-stat-grid,
+        .property-grid,
+        .booking-grid,
+        .field-grid,
+        .confirmation-grid {
+            display: grid;
+            gap: 16px;
+        }
+
+        .hero-stat-grid {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .stat,
+        .summary-card,
+        .arrival-card {
+            background: rgba(246, 241, 232, 0.06);
+            border: 1px solid rgba(246, 241, 232, 0.12);
+            border-radius: 8px;
+            padding: 12px;
+        }
+
+        .stat span,
+        .summary-label {
+            color: var(--muted);
+            display: block;
+            font-size: 0.76rem;
+            font-weight: 900;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+        }
+
+        .stat strong,
+        .summary-value {
+            color: var(--ink);
+            font-weight: 950;
+        }
+
+        .property-grid {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .property-card {
+            display: grid;
+            gap: 14px;
+            overflow: hidden;
+            padding: 14px;
+        }
+
+        .property-visual {
+            background: var(--visual-bg);
+            border: 1px solid rgba(246, 241, 232, 0.12);
+            border-radius: 8px;
+            height: 160px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .property-visual::before {
+            background:
+                linear-gradient(145deg, rgba(255, 255, 255, 0.22), transparent 34%),
+                radial-gradient(circle at 74% 20%, rgba(245, 199, 107, 0.4), transparent 12%),
+                linear-gradient(90deg, rgba(3, 4, 6, 0.2), transparent);
+            content: "";
+            inset: 0;
+            position: absolute;
+        }
+
+        .property-visual::after {
+            background:
+                linear-gradient(90deg, transparent 0 10%, rgba(246, 241, 232, 0.2) 10% 11%, transparent 11% 28%, rgba(246, 241, 232, 0.2) 28% 29%, transparent 29%),
+                linear-gradient(180deg, transparent 0 46%, rgba(246, 241, 232, 0.16) 46% 47%, transparent 47%);
+            content: "";
+            inset: 34px 22px;
+            position: absolute;
+        }
+
+        .property-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .chip {
+            background: rgba(52, 214, 179, 0.1);
+            border: 1px solid rgba(52, 214, 179, 0.24);
+            border-radius: 8px;
+            color: var(--accent);
+            font-size: 0.78rem;
+            font-weight: 900;
+            padding: 5px 8px;
+        }
+
+        .booking-grid,
+        .confirmation-grid {
+            grid-template-columns: minmax(0, 1fr) 360px;
+        }
+
+        .booking-panel,
+        .guest-panel,
+        .widget-panel,
+        .confirmation-panel {
+            padding: 20px;
+        }
+
+        .field-grid {
+            margin: 16px 0;
+        }
+
+        label {
+            color: var(--muted);
+            display: block;
+            font-size: 0.86rem;
+            font-weight: 900;
+            margin-bottom: 7px;
+        }
+
+        input,
+        select {
+            background: #05080b;
+            border: 1px solid rgba(232, 238, 246, 0.2);
+            border-radius: 8px;
+            color: var(--ink);
+            outline: none;
+            padding: 12px 13px;
+            width: 100%;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px rgba(52, 214, 179, 0.14);
+        }
+
+        .button-row {
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            align-items: center;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            cursor: pointer;
+            display: inline-flex;
+            font-weight: 950;
+            justify-content: center;
+            min-height: 46px;
+            padding: 11px 15px;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #03120e;
+        }
+
+        .btn-primary:hover {
+            background: #6be5cc;
+            border-color: #6be5cc;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border-color: rgba(246, 241, 232, 0.24);
+            color: var(--ink);
+        }
+
+        .summary-stack {
+            display: grid;
+            gap: 10px;
+        }
+
+        .status-box {
+            background: var(--panel-soft);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            color: var(--muted);
+            margin-top: 16px;
+            min-height: 48px;
+            padding: 12px;
+        }
+
+        .status-box.success {
+            background: rgba(52, 214, 179, 0.1);
+            border-color: rgba(52, 214, 179, 0.38);
+            color: var(--accent);
+        }
+
+        .status-box.error {
+            background: rgba(255, 125, 125, 0.1);
+            border-color: rgba(255, 125, 125, 0.34);
+            color: var(--danger);
+        }
+
+        .widget-panel {
+            overflow: hidden;
+            padding: 0;
+        }
+
+        .widget-panel-header {
+            border-bottom: 1px solid var(--line);
+            padding: 14px 16px;
+        }
+
+        .widget-panel-header h2 {
+            font-size: 1rem;
+            margin: 0;
+        }
+
+        .widget-copy {
+            color: var(--muted);
+            margin: 0;
+            padding: 14px 16px 0;
+        }
+
+        .widget-frame-wrap {
+            background: #05080b;
+            height: min(760px, calc(100vh - 190px));
+            min-height: 620px;
+        }
+
+        .widget-frame {
+            border: 0;
+            height: 100%;
+            width: 100%;
+        }
+
+        .widget-placeholder {
+            align-items: center;
+            background: linear-gradient(135deg, rgba(52, 214, 179, 0.12), rgba(5, 8, 11, 0.96));
+            color: var(--muted);
+            display: flex;
+            font-weight: 800;
+            height: 100%;
+            justify-content: center;
+            padding: 22px;
+            text-align: center;
+        }
+
+        .button-loader {
+            align-items: center;
+            display: inline-flex;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .button-loader::before {
+            animation: spin 0.8s linear infinite;
+            border: 2px solid rgba(3, 18, 14, 0.28);
+            border-radius: 50%;
+            border-top-color: #03120e;
+            content: "";
+            height: 14px;
+            width: 14px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @media (max-width: 920px) {
+
+            .hero,
+            .booking-grid,
+            .confirmation-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .property-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 640px) {
+            .app-shell {
+                padding: 18px;
+            }
+
+            .topbar,
+            .view-header,
+            .panel-header {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .hero-copy {
+                min-height: auto;
+            }
+
+            .hero-panel {
+                min-height: 240px;
+            }
+
+            .hero-stat-grid,
+            .property-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .widget-frame-wrap {
+                height: calc(100vh - 180px);
+                min-height: 520px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="app-shell">
+        <header class="topbar">
+            <div class="brand-lockup">
+                <img class="brand-logo" src="assets/logo.png" alt="StayCheck">
+                <div>
+                    <p class="brand-name">StayCheck</p>
+                    <p class="muted">Verified guest booking</p>
+                </div>
+            </div>
+            <div class="trust-pill">Hypersign ID Check-In</div>
+        </header>
+
+        <section id="property-view">
+            <div class="hero">
+                <div class="hero-copy">
+                    <p class="eyebrow">Private stays, verified guests</p>
+                    <h1>Book beautiful properties with contactless ID checks.</h1>
+                    <p class="muted">Choose a property, select your dates, and complete a privacy-preserving Hypersign
+                        ID check before arrival. No front-desk passport scans, no unnecessary PII sharing.</p>
+                </div>
+                <div class="hero-panel" aria-label="StayCheck reservation preview">
+                    <div class="hero-suite"></div>
+                    <div class="hero-panel-content">
+                        <h2>Remote pre-arrival verification</h2>
+                        <div class="hero-stat-grid">
+                            <div class="stat">
+                                <span>Credential</span>
+                                <strong>Verified</strong>
+                            </div>
+                            <div class="stat">
+                                <span>Arrival</span>
+                                <strong>Contactless</strong>
+                            </div>
+                            <div class="stat">
+                                <span>Data</span>
+                                <strong>Minimal</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="view-header">
+                <div>
+                    <p class="eyebrow">Available properties</p>
+                    <h2>Choose your stay</h2>
+                </div>
+            </div>
+            <div id="property-grid" class="property-grid"></div>
+        </section>
+
+        <section id="booking-view" class="hidden">
+            <div class="view-header">
+                <div>
+                    <p class="eyebrow">Reservation dates</p>
+                    <h1 id="booking-title">Choose dates</h1>
+                </div>
+                <button id="btn-back-properties" class="btn btn-secondary" type="button">Back to Properties</button>
+            </div>
+
+            <div class="booking-grid">
+                <section class="booking-panel">
+                    <div class="panel-header">
+                        <div>
+                            <h2 id="selected-property-name">Selected property</h2>
+                            <p id="selected-property-location" class="muted"></p>
+                        </div>
+                        <span id="selected-property-price" class="chip"></span>
+                    </div>
+                    <div class="field-grid">
+                        <div>
+                            <label for="checkin-date">Check-in Date</label>
+                            <input id="checkin-date" type="date" required>
+                        </div>
+                        <div>
+                            <label for="checkout-date">Check-out Date</label>
+                            <input id="checkout-date" type="date" required>
+                        </div>
+                        <div>
+                            <label for="guest-count">Guests</label>
+                            <select id="guest-count">
+                                <option value="1">1 guest</option>
+                                <option value="2" selected>2 guests</option>
+                                <option value="3">3 guests</option>
+                                <option value="4">4 guests</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="button-row">
+                        <button id="btn-proceed-guest" class="btn btn-primary" type="button">Proceed to Guest
+                            Details</button>
+                    </div>
+                    <div id="booking-status" class="status-box">Select dates to continue your reservation.</div>
+                </section>
+
+                <aside class="summary-card" aria-label="Reservation summary">
+                    <h2>Booking Summary</h2>
+                    <div id="booking-summary" class="summary-stack"></div>
+                </aside>
+            </div>
+        </section>
+
+        <section id="guest-details-view" class="hidden">
+            <div class="view-header">
+                <div>
+                    <p class="eyebrow">Guest details</p>
+                    <h1>Confirm your identity before booking.</h1>
+                </div>
+                <button id="btn-back-booking" class="btn btn-secondary" type="button">Back to Dates</button>
+            </div>
+
+            <div class="booking-grid">
+                <div>
+                    <section id="guest-details-panel" class="guest-panel">
+                        <h2>Guest Details</h2>
+                        <p class="muted">StayCheck verifies your identity credentials without storing physical ID scans
+                            in this demo.</p>
+                        <div class="field-grid">
+                            <div>
+                                <label for="guest-name">Name</label>
+                                <input id="guest-name" type="text" autocomplete="name" placeholder="Maya Kapoor"
+                                    required>
+                            </div>
+                            <div>
+                                <label for="guest-email">Email</label>
+                                <input id="guest-email" type="email" autocomplete="email"
+                                    placeholder="maya@example.com" required>
+                            </div>
+                        </div>
+                        <div class="button-row">
+                            <button id="btn-start-checkin" class="btn btn-primary" type="button">Verify Identity with
+                                Hypersign</button>
+                            <button id="btn-restart-session" class="btn btn-secondary hidden" type="button">Restart
+                                Session</button>
+                        </div>
+                        <div id="checkin-status" class="status-box">Enter guest details to start pre-arrival
+                            verification.</div>
+                    </section>
+
+                    <section id="verification-view" class="hidden">
+                        <div id="staycheck-widget-panel" class="widget-panel" aria-label="Hypersign ID widget">
+                            <div class="widget-panel-header">
+                                <h2>Hypersign ID</h2>
+                                <span class="muted">Guest verification</span>
+                            </div>
+                            <p class="widget-copy">Present verified identity credentials without oversharing sensitive
+                                personal information.</p>
+                            <div id="staycheck-widget-frame-wrap" class="widget-frame-wrap">
+                                <div id="staycheck-widget-placeholder" class="widget-placeholder">Your identity check
+                                    will appear here.</div>
+                                <iframe id="staycheck-widget-frame" class="widget-frame hidden"
+                                    title="Hypersign ID Widget"
+                                    allow="camera; microphone; fullscreen; clipboard-read; clipboard-write"></iframe>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <aside class="summary-card" aria-label="Pending reservation summary">
+                    <h2>Pending Reservation</h2>
+                    <div id="guest-summary" class="summary-stack"></div>
+                </aside>
+            </div>
+        </section>
+
+        <section id="verified-view" class="confirmation-panel hidden" aria-label="Reservation confirmation">
+            <p class="eyebrow">Reservation Booked</p>
+            <h1>Check-in ready.</h1>
+            <p id="confirmation-copy" class="muted"></p>
+            <div class="confirmation-grid">
+                <div class="arrival-card">
+                    <h2>Arrival Instructions</h2>
+                    <p class="muted">Your digital key will be prepared 2 hours before arrival. Show your booking
+                        reference at the property entrance if requested.</p>
+                </div>
+                <div class="summary-card">
+                    <h2>Confirmed Stay</h2>
+                    <div id="confirmed-summary" class="summary-stack"></div>
+                </div>
+            </div>
+            <div class="button-row">
+                <button id="btn-new-checkin" class="btn btn-primary" type="button">Start Another Check-In</button>
+            </div>
+        </section>
+    </main>
+
     <script>
         const demoIdConfig = window.DEMO_ID_CONFIG || {};
         const state = {
             widgetUrl: demoIdConfig.widgetUrl || "https://verify.hypersign.id",
             demoIdBackendBaseURL: demoIdConfig.demoIdBackendBaseURL || "http://localhost:3007",
+            tokens: {
+                kycAdmin: "",
+                ssiAdmin: "",
+                userBearer: ""
+            },
+            sessionId: "",
+            selectedProperty: null,
+            checkinDate: "",
+            checkoutDate: "",
+            guestCount: 2,
+            guest: {
+                name: "",
+                email: ""
+            },
+            verified: false,
+            widgetActive: false,
+            bookingRef: ""
         };
+
+        const properties = [
+            {
+                id: "harbor-loft",
+                name: "Harbor Loft",
+                location: "Lisbon Waterfront",
+                price: 188,
+                capacity: "2 guests",
+                type: "Design loft",
+                description: "A quiet suite with river views, self check-in, and a private balcony.",
+                visual: "linear-gradient(135deg, #172027, #354350 52%, #121817)"
+            },
+            {
+                id: "cypress-villa",
+                name: "Cypress Villa",
+                location: "Lake Como Hills",
+                price: 420,
+                capacity: "6 guests",
+                type: "Private villa",
+                description: "A full-home retreat with terrace dining, garden access, and concierge arrival.",
+                visual: "linear-gradient(135deg, #111416, #4f4635 48%, #17332c)"
+            },
+            {
+                id: "metro-studio",
+                name: "Metro Studio",
+                location: "Tokyo Shibuya",
+                price: 132,
+                capacity: "2 guests",
+                type: "Serviced apartment",
+                description: "A compact premium stay near transit with secure access and remote check-in.",
+                visual: "linear-gradient(135deg, #12151c, #2d334b 50%, #0a1718)"
+            }
+        ];
+
+        const propertyView = document.getElementById("property-view");
+        const bookingView = document.getElementById("booking-view");
+        const guestDetailsView = document.getElementById("guest-details-view");
+        const verifiedView = document.getElementById("verified-view");
+        const propertyGrid = document.getElementById("property-grid");
+        const guestDetailsPanel = document.getElementById("guest-details-panel");
+        const verificationView = document.getElementById("verification-view");
+        const widgetFrame = document.getElementById("staycheck-widget-frame");
+        const widgetPlaceholder = document.getElementById("staycheck-widget-placeholder");
+        const startCheckinBtn = document.getElementById("btn-start-checkin");
+        const restartSessionBtn = document.getElementById("btn-restart-session");
+        const checkinStatus = document.getElementById("checkin-status");
+
+        window.addEventListener("message", handleWidgetMessage);
+        document.getElementById("btn-back-properties").addEventListener("click", showPropertyView);
+        document.getElementById("btn-back-booking").addEventListener("click", showBookingView);
+        document.getElementById("btn-proceed-guest").addEventListener("click", proceedToGuestDetails);
+        document.getElementById("btn-new-checkin").addEventListener("click", resetDemo);
+        startCheckinBtn.addEventListener("click", startIdentityVerification);
+        restartSessionBtn.addEventListener("click", restartVerificationSession);
+        document.getElementById("checkin-date").addEventListener("change", updateBookingFromInputs);
+        document.getElementById("checkout-date").addEventListener("change", updateBookingFromInputs);
+        document.getElementById("guest-count").addEventListener("change", updateBookingFromInputs);
+
+        renderProperties();
+
+        function renderProperties() {
+            propertyGrid.innerHTML = properties.map(property => `
+                <article class="property-card">
+                    <div class="property-visual" style="--visual-bg: ${property.visual};"></div>
+                    <div>
+                        <h2>${property.name}</h2>
+                        <p class="muted">${property.description}</p>
+                    </div>
+                    <div class="property-meta">
+                        <span class="chip">${property.location}</span>
+                        <span class="chip">${property.capacity}</span>
+                        <span class="chip">${formatCurrency(property.price)} / night</span>
+                    </div>
+                    <button class="btn btn-primary" type="button" data-property-id="${property.id}">Select Stay</button>
+                </article>
+            `).join("");
+
+            propertyGrid.querySelectorAll("[data-property-id]").forEach(button => {
+                button.addEventListener("click", () => selectProperty(button.dataset.propertyId));
+            });
+        }
+
+        function selectProperty(propertyId) {
+            state.selectedProperty = properties.find(property => property.id === propertyId);
+            state.bookingRef = `STAY-${Math.floor(100000 + Math.random() * 900000)}`;
+            document.getElementById("booking-title").innerText = `Book ${state.selectedProperty.name}`;
+            document.getElementById("selected-property-name").innerText = state.selectedProperty.name;
+            document.getElementById("selected-property-location").innerText =
+                `${state.selectedProperty.location} · ${state.selectedProperty.type}`;
+            document.getElementById("selected-property-price").innerText =
+                `${formatCurrency(state.selectedProperty.price)} / night`;
+            setDefaultDates();
+            updateBookingFromInputs();
+            showBookingView();
+        }
+
+        function setDefaultDates() {
+            const today = new Date();
+            const checkin = new Date(today);
+            checkin.setDate(today.getDate() + 7);
+            const checkout = new Date(checkin);
+            checkout.setDate(checkin.getDate() + 3);
+            document.getElementById("checkin-date").value = formatInputDate(checkin);
+            document.getElementById("checkout-date").value = formatInputDate(checkout);
+            document.getElementById("guest-count").value = "2";
+        }
+
+        function updateBookingFromInputs() {
+            state.checkinDate = document.getElementById("checkin-date").value;
+            state.checkoutDate = document.getElementById("checkout-date").value;
+            state.guestCount = Number(document.getElementById("guest-count").value || 1);
+            renderBookingSummaries();
+        }
+
+        function proceedToGuestDetails() {
+            updateBookingFromInputs();
+            if (!state.selectedProperty || !state.checkinDate || !state.checkoutDate || getNightCount() <= 0) {
+                setBookingStatus("Choose a valid check-in and check-out date.", "error");
+                return;
+            }
+
+            setBookingStatus("Reservation details are ready for guest verification.", "success");
+            showGuestDetailsView();
+        }
+
+        async function startIdentityVerification() {
+            const name = document.getElementById("guest-name").value.trim();
+            const email = document.getElementById("guest-email").value.trim();
+
+            if (!name || !email) {
+                setCheckinStatus("Enter guest name and email before verification.", "error");
+                return;
+            }
+
+            setButtonLoading(startCheckinBtn, true, "Preparing...");
+            restartSessionBtn.classList.add("hidden");
+
+            try {
+                await refreshVerificationSession(name, email);
+                resetWidgetFrame();
+                openIdentityVerification();
+            } catch (error) {
+                setCheckinStatus(error.message, "error");
+                alert(`Verification Setup Error: ${error.message}`);
+            } finally {
+                setButtonLoading(startCheckinBtn, false);
+                if (state.widgetActive) startCheckinBtn.disabled = true;
+            }
+        }
+
+        async function refreshVerificationSession(name, email) {
+            const response = await fetch(`${state.demoIdBackendBaseURL}/get-required-tokens-and-session-for-a-user`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ name, email })
+            });
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || data.message || "Could not start guest identity verification.");
+            }
+
+            state.tokens.kycAdmin = data.kycAdminToken;
+            state.tokens.ssiAdmin = data.ssiAdminToken;
+            state.tokens.userBearer = data.kycUserAccessToken || data.userBearerToken;
+            state.sessionId = data.sessionId;
+            state.widgetUrl = normalizeWidgetUrl(data.widgetUrl || state.widgetUrl);
+            state.guest.name = name;
+            state.guest.email = email;
+            state.verified = false;
+        }
+
+        async function restartVerificationSession() {
+            const name = state.guest.name || document.getElementById("guest-name").value.trim();
+            const email = state.guest.email || document.getElementById("guest-email").value.trim();
+
+            if (!name || !email) {
+                setCheckinStatus("Enter guest details before restarting verification.", "error");
+                return;
+            }
+
+            resetWidgetFrame();
+            setButtonLoading(restartSessionBtn, true, "Restarting...");
+            startCheckinBtn.disabled = true;
+            setCheckinStatus("Requesting a new verification session...", "");
+
+            try {
+                await refreshVerificationSession(name, email);
+                restartSessionBtn.classList.add("hidden");
+                openIdentityVerification();
+            } catch (error) {
+                setCheckinStatus(error.message, "error");
+                restartSessionBtn.classList.remove("hidden");
+            } finally {
+                setButtonLoading(restartSessionBtn, false);
+                startCheckinBtn.disabled = state.widgetActive;
+            }
+        }
+
+        function openIdentityVerification() {
+            if (!state.sessionId || !state.tokens.userBearer) {
+                setCheckinStatus("Enter guest details before ID verification.", "error");
+                return;
+            }
+
+            const targetUrl = buildWidgetUrl();
+            guestDetailsPanel.classList.add("hidden");
+            verificationView.classList.remove("hidden");
+            widgetPlaceholder.classList.add("hidden");
+            widgetFrame.src = targetUrl;
+            widgetFrame.classList.remove("hidden");
+            state.widgetActive = true;
+            startCheckinBtn.disabled = true;
+            restartSessionBtn.classList.add("hidden");
+            setCheckinStatus("Complete verification in the Hypersign panel.", "");
+        }
+
+        function handleWidgetMessage(event) {
+            if (!state.widgetUrl) return;
+
+            const fromEmbeddedWidget = widgetFrame.contentWindow && event.source === widgetFrame.contentWindow;
+            if (!fromEmbeddedWidget) return;
+
+            const expectedOrigin = new URL(state.widgetUrl, window.location.origin).origin;
+            if (event.origin !== expectedOrigin) return;
+
+            try {
+                const payload = parseWidgetPayload(event.data);
+                const { status, message, code } = payload;
+
+                if (status === "success" && code === "VERIFICATION_SUCCESS") {
+                    markIdentityVerified(message || "Guest identity verification completed.");
+                    return;
+                }
+
+                if (status === "error") {
+                    showVerificationFailure(code, message);
+                    return;
+                }
+
+                showVerificationFailure(code, message || "Unknown widget response.");
+            } catch (error) {
+                showVerificationFailure("", "Could not read the widget response.");
+            }
+        }
+
+        function markIdentityVerified(message) {
+            state.verified = true;
+            state.widgetActive = false;
+            resetWidgetFrame();
+            verificationView.classList.add("hidden");
+            setCheckinStatus(message, "success");
+            showVerifiedView();
+        }
+
+        function showVerificationFailure(code, message) {
+            state.widgetActive = false;
+            resetWidgetFrame();
+            guestDetailsPanel.classList.remove("hidden");
+            verificationView.classList.add("hidden");
+            startCheckinBtn.disabled = false;
+            restartSessionBtn.classList.remove("hidden");
+            setCheckinStatus(message || getKycErrorMessage(code), "error");
+        }
+
+        function parseWidgetPayload(data) {
+            if (typeof data === "string") {
+                return JSON.parse(data);
+            }
+
+            return data || {};
+        }
+
+        function getKycErrorMessage(code) {
+            switch (code) {
+                case "SESSION_EXPIRED":
+                    return "Verification session expired. Restart the session and try again.";
+                case "ACCESS_TOKEN_EXPIRED":
+                    return "Verification tokens expired. Restart the session and try again.";
+                case "LIVELINESS_VERIFICATION_FAILED":
+                    return "Biometric validation failed. Restart the session and try again.";
+                case "DOCUMENT_VERIFICATION_FAILED":
+                    return "Document verification failed. Restart the session and try again.";
+                case "ZK_PROOF_GENERATION_FAILED":
+                    return "Proof generation failed. Restart the session and try again.";
+                default:
+                    return "ID verification failed.";
+            }
+        }
+
+        function buildWidgetUrl() {
+            const url = new URL(normalizeWidgetUrl(state.widgetUrl), window.location.origin);
+            url.searchParams.set("kycAccessToken", state.tokens.kycAdmin);
+            url.searchParams.set("ssiAccessToken", state.tokens.ssiAdmin);
+            url.searchParams.set("sessionId", state.sessionId);
+            url.searchParams.set("kycUserAccessToken", state.tokens.userBearer);
+            return url.toString();
+        }
+
+        function normalizeWidgetUrl(value) {
+            const normalizedUrl = (value || "").trim();
+            if (normalizedUrl.startsWith("http://verify.hypersign.id")) {
+                return normalizedUrl.replace(/^http:\/\//, "https://");
+            }
+            return normalizedUrl;
+        }
+
+        function showPropertyView() {
+            propertyView.classList.remove("hidden");
+            bookingView.classList.add("hidden");
+            guestDetailsView.classList.add("hidden");
+            verifiedView.classList.add("hidden");
+        }
+
+        function showBookingView() {
+            propertyView.classList.add("hidden");
+            bookingView.classList.remove("hidden");
+            guestDetailsView.classList.add("hidden");
+            verifiedView.classList.add("hidden");
+        }
+
+        function showGuestDetailsView() {
+            renderBookingSummaries();
+            propertyView.classList.add("hidden");
+            bookingView.classList.add("hidden");
+            guestDetailsView.classList.remove("hidden");
+            verifiedView.classList.add("hidden");
+            guestDetailsPanel.classList.remove("hidden");
+            verificationView.classList.add("hidden");
+        }
+
+        function showVerifiedView() {
+            propertyView.classList.add("hidden");
+            bookingView.classList.add("hidden");
+            guestDetailsView.classList.add("hidden");
+            verifiedView.classList.remove("hidden");
+            document.getElementById("confirmation-copy").innerText =
+                `${state.guest.name}, your reservation at ${state.selectedProperty.name} is booked. StayCheck completed your pre-arrival Hypersign ID verification.`;
+            renderBookingSummaries();
+        }
+
+        function resetDemo() {
+            state.tokens.kycAdmin = "";
+            state.tokens.ssiAdmin = "";
+            state.tokens.userBearer = "";
+            state.sessionId = "";
+            state.selectedProperty = null;
+            state.checkinDate = "";
+            state.checkoutDate = "";
+            state.guestCount = 2;
+            state.guest.name = "";
+            state.guest.email = "";
+            state.verified = false;
+            state.widgetActive = false;
+            state.bookingRef = "";
+            resetWidgetFrame();
+            document.getElementById("guest-name").value = "";
+            document.getElementById("guest-email").value = "";
+            startCheckinBtn.disabled = false;
+            startCheckinBtn.innerText = "Verify Identity with Hypersign";
+            restartSessionBtn.classList.add("hidden");
+            setCheckinStatus("Enter guest details to start pre-arrival verification.", "");
+            setBookingStatus("Select dates to continue your reservation.", "");
+            showPropertyView();
+        }
+
+        function resetWidgetFrame() {
+            state.widgetActive = false;
+            widgetFrame.removeAttribute("src");
+            widgetFrame.classList.add("hidden");
+            widgetPlaceholder.classList.remove("hidden");
+        }
+
+        function renderBookingSummaries() {
+            const summary = getReservationSummaryRows();
+            document.getElementById("booking-summary").innerHTML = summary;
+            document.getElementById("guest-summary").innerHTML = summary;
+            document.getElementById("confirmed-summary").innerHTML = summary;
+        }
+
+        function getReservationSummaryRows() {
+            const property = state.selectedProperty;
+            if (!property) return `<p class="muted">No property selected.</p>`;
+
+            const nights = Math.max(getNightCount(), 0);
+            const total = nights > 0 ? property.price * nights : 0;
+            const rows = [
+                ["Property", property.name],
+                ["Location", property.location],
+                ["Dates", state.checkinDate && state.checkoutDate ? `${formatDisplayDate(state.checkinDate)} - ${formatDisplayDate(state.checkoutDate)}` : "Select dates"],
+                ["Guests", `${state.guestCount} ${state.guestCount === 1 ? "guest" : "guests"}`],
+                ["Nights", nights ? `${nights}` : "Pending"],
+                ["Estimated Total", total ? formatCurrency(total) : "Pending"],
+                ["Reference", state.bookingRef || "Pending"]
+            ];
+
+            return rows.map(([label, value]) => `
+                <div class="summary-row">
+                    <span class="summary-label">${label}</span>
+                    <strong class="summary-value">${value}</strong>
+                </div>
+            `).join("");
+        }
+
+        function getNightCount() {
+            if (!state.checkinDate || !state.checkoutDate) return 0;
+            const checkin = new Date(`${state.checkinDate}T00:00:00`);
+            const checkout = new Date(`${state.checkoutDate}T00:00:00`);
+            return Math.round((checkout - checkin) / 86400000);
+        }
+
+        function setBookingStatus(message, type) {
+            const bookingStatus = document.getElementById("booking-status");
+            bookingStatus.innerText = message;
+            bookingStatus.className = "status-box";
+            if (type) bookingStatus.classList.add(type);
+        }
+
+        function setCheckinStatus(message, type) {
+            checkinStatus.innerText = message;
+            checkinStatus.className = "status-box";
+            if (type) checkinStatus.classList.add(type);
+        }
+
+        function setButtonLoading(button, isLoading, loadingText) {
+            if (!button) return;
+            if (isLoading) {
+                if (!button.dataset.defaultText) {
+                    button.dataset.defaultText = button.innerText;
+                }
+                button.disabled = true;
+                button.innerHTML = `<span class="button-loader">${loadingText || button.innerText}</span>`;
+                return;
+            }
+            button.disabled = false;
+            button.innerText = button.dataset.defaultText || button.innerText;
+        }
+
+        function formatCurrency(value) {
+            return new Intl.NumberFormat("en-US", {
+                style: "currency",
+                currency: "USD",
+                maximumFractionDigits: 0
+            }).format(value);
+        }
+
+        function formatInputDate(date) {
+            return date.toISOString().slice(0, 10);
+        }
+
+        function formatDisplayDate(value) {
+            return new Intl.DateTimeFormat("en-US", {
+                month: "short",
+                day: "numeric",
+                year: "numeric"
+            }).format(new Date(`${value}T00:00:00`));
+        }
     </script>
-</head>
-<body>
-    <div id="property-view">
-        <h1>StayCheck</h1>
-        <p>Privacy-preserving booking and remote pre-arrival verification.</p>
-        <div class="property-grid">
-            <div class="property-card">
-                <img src="assets/property1.jpg" alt="Property 1">
-                <h2>Cozy Apartment</h2>
-                <p>Location: Downtown</p>
-                <p>Price: $120/night</p>
-                <p>Capacity: 2 guests</p>
-                <p>Short description of the property.</p>
-                <button>Select</button>
-            </div>
-            <div class="property-card">
-                <img src="assets/property2.jpg" alt="Property 2">
-                <h2>Luxury Villa</h2>
-                <p>Location: Beachside</p>
-                <p>Price: $350/night</p>
-                <p>Capacity: 8 guests</p>
-                <p>Short description of the property.</p>
-                <button>Select</button>
-            </div>
-            <div class="property-card">
-                <img src="assets/property3.jpg" alt="Property 3">
-                <h2>Modern Studio</h2>
-                <p>Location: Uptown</p>
-                <p>Price: $90/night</p>
-                <p>Capacity: 1 guest</p>
-                <p>Short description of the property.</p>
-                <button>Select</button>
-            </div>
-        </div>
-    </div>
-    <div id="booking-view" style="display:none;">
-        <h2>Booking Details</h2>
-        <p>Selected Property: <span id="selected-property"></span></p>
-        <label for="checkin-date">Check-in Date:</label>
-        <input type="date" id="checkin-date">
-        <label for="checkout-date">Check-out Date:</label>
-        <input type="date" id="checkout-date">
-        <button id="proceed-to-guest-details">Proceed to Guest Details</button>
-        <div id="reservation-summary"></div>
-    </div>
-    <div id="guest-details-view" style="display:none;">
-        <h2>Guest Details</h2>
-        <div id="reservation-summary"></div>
-        <label for="guest-name">Name:</label>
-        <input type="text" id="guest-name">
-        <label for="guest-email">Email:</label>
-        <input type="email" id="guest-email">
-        <button id="btn-start-checkin">Verify Identity with Hypersign</button>
-        <div id="checkin-status">Enter guest details to start pre-arrival verification.</div>
-    </div>
-    <div id="verification-view" style="display:none;">
-        <h2>Verification</h2>
-        <div id="staycheck-widget-panel">
-            <iframe id="staycheck-widget-frame" src="" frameborder="0"></iframe>
-        </div>
-        <p>StayCheck confirms identity credentials without storing physical ID scans in this demo.</p>
-    </div>
-    <div id="verified-view" style="display:none;">
-        <h2>Reservation Booked</h2>
-        <p>Confirmation message including guest name.</p>
-        <p>Selected property and booking date details.</p>
-        <p>Mock confirmation number, arrival instruction, or digital key readiness message.</p>
-        <button id="btn-new-checkin">Start Another Check-In</button>
-    </div>
 </body>
+
 </html>
