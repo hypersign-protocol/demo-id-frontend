@@ -45,22 +45,22 @@ jobs:
           ADR_FILENAME: ${{ github.event.client_payload.adr_filename || inputs.adr_filename }}
         run: |
           cat <<EOF > task.txt
-          You are tasked with implementing an Architectural Decision Record (ADR).
+          Your goal is to implement the specifications described in docs/adr/$ADR_FILENAME.
 
           Instructions:
-          1. Read the ADR specifications located in docs/adr/$ADR_FILENAME.
-          2. Modify or create the necessary files in the workspace to fulfill the ADR requirements.
-          3. Keep edits minimal and focused directly on the requested ADR implementation.
-          4. Run tests or build commands if necessary to verify.
-          5. Immediately complete the task once edits are in place. Do not repeat failed commands.
+          1. Read docs/adr/$ADR_FILENAME carefully.
+          2. Inspect existing workspace structure and modify or create necessary files.
+          3. Avoid running interactive or long-running shell commands.
+          4. Execute build or test commands to verify your implementation if required.
+          5. Call the 'finish' tool immediately once edits are saved and verified.
           EOF
 
       - name: Run OpenHands Agent Image
         env:
           LLM_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          LLM_MODEL: "openai/gpt-4o-mini"
+          LLM_MODEL: "openai/gpt-4o"
           WORKSPACE_BASE: ${{ github.workspace }}
-          MAX_ITERATIONS: 15
+          MAX_ITERATIONS: 30
         run: |
           docker run --rm \
             --add-host=host.docker.internal:host-gateway \
@@ -69,6 +69,7 @@ jobs:
             -e MAX_ITERATIONS="$MAX_ITERATIONS" \
             -e WORKSPACE_MOUNT_PATH="$WORKSPACE_BASE" \
             -e SANDBOX_USER_ID=0 \
+            -e DISABLE_MICROAGENTS=true \
             -v /var/run/docker.sock:/var/run/docker.sock \
             -v "$WORKSPACE_BASE":/opt/workspace_base \
             ghcr.io/all-hands-ai/openhands:main \
