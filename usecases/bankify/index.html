@@ -6,19 +6,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bankify Customer Onboarding</title>
     <script src="../../config.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #03070d;
-            --panel: #0a111d;
-            --panel-soft: #101a2a;
-            --line: rgba(148, 180, 224, 0.18);
-            --ink: #f1f7ff;
-            --muted: #9fb0c6;
-            --accent: #4cc9a7;
-            --accent-strong: #7ddfcb;
-            --warn: #f0bf62;
-            --danger: #ee7878;
-            --shadow: rgba(0, 0, 0, 0.34);
+            --bg: #fbfbfd;
+            --panel: #ffffff;
+            --panel-soft: #f6f6f9;
+            --line: #e6e7eb;
+            --ink: #12141f;
+            --ink-soft: #2b2e3d;
+            --muted: #6b7280;
+            --accent: #6d5ce8;
+            --accent-strong: #5b48e0;
+            --accent-soft: #efecfc;
+            --dark: #12141f;
+            --dark-strong: #262a3f;
+            --success: #16a34a;
+            --success-soft: #dcfce7;
+            --warn: #b45309;
+            --warn-soft: #fef3c7;
+            --danger: #dc2626;
+            --danger-soft: #fee2e2;
+            --shadow: rgba(18, 20, 31, 0.06);
+
+            --radius-sm: 10px;
+            --radius-md: 14px;
+            --radius-lg: 20px;
         }
 
         * {
@@ -27,11 +42,11 @@
 
         body {
             background:
-                linear-gradient(120deg, rgba(76, 201, 167, 0.16), transparent 28%),
-                linear-gradient(250deg, rgba(98, 132, 202, 0.18), transparent 30%),
-                linear-gradient(180deg, #03070d 0%, #070d17 54%, #03070d 100%);
+                radial-gradient(ellipse 44% 34% at 0% 100%, rgba(109, 92, 232, 0.06), transparent 70%),
+                var(--bg);
             color: var(--ink);
-            font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            font-weight: 400;
             line-height: 1.5;
             margin: 0;
             min-height: 100vh;
@@ -44,92 +59,30 @@
 
         button:disabled {
             cursor: not-allowed;
-            opacity: 0.65;
+            opacity: 0.55;
         }
 
         .hidden {
             display: none !important;
         }
 
-        .app-shell {
-            margin: 0 auto;
-            max-width: 1180px;
-            padding: 24px;
+        .icon {
+            fill: none;
+            flex-shrink: 0;
+            stroke: currentColor;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-width: 2;
         }
 
-        .topbar {
-            align-items: center;
-            display: flex;
-            gap: 16px;
-            justify-content: space-between;
-            margin-bottom: 28px;
+        .icon-sm {
+            height: 14px;
+            width: 14px;
         }
 
-        .brand-lockup {
-            align-items: center;
-            display: flex;
-            gap: 12px;
-        }
-
-        .brand-logo {
-            background: #06101a;
-            border: 1px solid var(--line);
-            border-radius: 8px;
-            display: block;
-            height: 54px;
-            object-fit: contain;
-            padding: 4px;
-            width: 54px;
-        }
-
-        .brand-name {
-            font-size: 1.35rem;
-            font-weight: 900;
-            letter-spacing: 0;
-            line-height: 1;
-            margin: 0;
-        }
-
-        .brand-subtitle,
-        .muted {
-            color: var(--muted);
-        }
-
-        .brand-subtitle {
-            font-size: 0.88rem;
-            margin: 4px 0 0;
-        }
-
-        .trust-pill {
-            border: 1px solid var(--line);
-            border-radius: 8px;
-            color: var(--accent-strong);
-            font-size: 0.88rem;
-            font-weight: 800;
-            padding: 9px 12px;
-        }
-
-        .onboarding-grid,
-        .verified-grid {
-            align-items: start;
-            display: grid;
-            gap: 18px;
-            grid-template-columns: minmax(0, 1fr) 380px;
-        }
-
-        .hero-copy {
-            align-content: center;
-            min-height: 260px;
-            padding: 8px 0 24px;
-        }
-
-        .eyebrow {
-            color: var(--accent-strong);
-            font-size: 0.8rem;
-            font-weight: 900;
-            letter-spacing: 0.08em;
-            margin: 0 0 10px;
-            text-transform: uppercase;
+        .icon-md {
+            height: 18px;
+            width: 18px;
         }
 
         h1,
@@ -139,42 +92,230 @@
             margin-top: 0;
         }
 
+        .muted {
+            color: var(--muted);
+        }
+
+        /* Header */
+
+        .page-header {
+            align-items: center;
+            border-bottom: 1px solid var(--line);
+            display: flex;
+            gap: 16px;
+            justify-content: space-between;
+            padding: 20px 48px;
+        }
+
+        .brand-lockup {
+            align-items: center;
+            display: flex;
+            gap: 12px;
+        }
+
+        .brand-icon {
+            color: var(--ink);
+            height: 34px;
+            width: 34px;
+            stroke-width: 1.6;
+        }
+
+        .brand-name {
+            color: var(--accent);
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            line-height: 1;
+            margin: 0;
+        }
+
+        .brand-subtitle {
+            color: var(--muted);
+            font-size: 0.84rem;
+            font-weight: 500;
+            margin: 4px 0 0;
+        }
+
+        .trust-note {
+            align-items: center;
+            color: var(--muted);
+            display: flex;
+            font-size: 0.86rem;
+            font-weight: 500;
+            gap: 8px;
+        }
+
+        .trust-note strong {
+            color: var(--ink);
+            font-weight: 700;
+        }
+
+        /* Onboarding split shell */
+
+        .onboarding-shell {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .hero-pane {
+            background: #eef0f4;
+            padding: 56px 56px 40px;
+        }
+
+        .form-pane {
+            background: var(--panel);
+            border-left: 1px solid var(--line);
+            padding: 40px 48px;
+        }
+
+        .eyebrow-pill {
+            align-items: center;
+            background: var(--accent-soft);
+            border-radius: 999px;
+            color: var(--accent-strong);
+            display: inline-flex;
+            font-size: 0.72rem;
+            font-weight: 700;
+            gap: 8px;
+            letter-spacing: 0.06em;
+            margin-bottom: 20px;
+            padding: 7px 14px;
+            text-transform: uppercase;
+        }
+
+        .eyebrow-pill .dot {
+            background: var(--accent);
+            border-radius: 50%;
+            height: 6px;
+            width: 6px;
+        }
+
         h1 {
-            font-size: clamp(2.2rem, 5vw, 4.9rem);
-            font-weight: 900;
-            letter-spacing: 0;
-            line-height: 0.95;
-            margin-bottom: 18px;
-            max-width: 780px;
-        }
-
-        h2 {
-            font-size: 1.35rem;
-            margin-bottom: 8px;
-        }
-
-        h3 {
-            font-size: 1rem;
-            margin-bottom: 10px;
-        }
-
-        .hero-copy .muted {
-            font-size: 1.05rem;
+            font-size: clamp(2rem, 4.2vw, 3.4rem);
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            line-height: 1.05;
+            margin-bottom: 16px;
             max-width: 620px;
         }
 
+        .hero-pane .muted {
+            font-size: 1.05rem;
+            font-weight: 500;
+            max-width: 520px;
+        }
+
+        /* Journey steps */
+
+        .journey-row {
+            align-items: flex-start;
+            display: flex;
+            margin: 44px 0 32px;
+            max-width: 560px;
+        }
+
+        .journey-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            text-align: center;
+            width: 150px;
+        }
+
+        .journey-icon {
+            align-items: center;
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 50%;
+            color: var(--ink);
+            display: flex;
+            height: 52px;
+            justify-content: center;
+            width: 52px;
+        }
+
+        .journey-step strong {
+            font-size: 0.86rem;
+            font-weight: 700;
+        }
+
+        .journey-step .muted {
+            font-size: 0.76rem;
+            line-height: 1.35;
+        }
+
+        .journey-line {
+            border-top: 1px dashed var(--line);
+            flex: 1 1 auto;
+            margin-top: 26px;
+        }
+
+        .notice-box {
+            align-items: flex-start;
+            background: var(--panel-soft);
+            border: 1px solid var(--line);
+            border-radius: var(--radius-md);
+            display: flex;
+            gap: 14px;
+            max-width: 480px;
+            padding: 16px 18px;
+        }
+
+        .notice-box .icon {
+            color: var(--ink);
+            margin-top: 2px;
+        }
+
+        .notice-box strong {
+            display: block;
+            font-size: 0.9rem;
+            margin-bottom: 2px;
+        }
+
+        .notice-box p {
+            color: var(--muted);
+            font-size: 0.84rem;
+            margin: 0;
+        }
+
+        /* Panel / card */
+
         .panel,
-        .widget-panel,
         .account-card,
         .transaction-panel {
-            background: rgba(10, 17, 29, 0.94);
+            background: var(--panel);
             border: 1px solid var(--line);
-            border-radius: 8px;
-            box-shadow: 0 20px 54px var(--shadow);
+            border-radius: var(--radius-lg);
+            box-shadow: 0 1px 2px var(--shadow);
         }
 
         .panel {
-            padding: 20px;
+            overflow: hidden;
+            padding: 0;
+        }
+
+        .panel-section {
+            padding: 20px 22px;
+        }
+
+        .panel-divider {
+            background: var(--line);
+            height: 1px;
+            margin: 0;
+        }
+
+        .panel-section-label {
+            color: var(--ink);
+            font-size: 0.92rem;
+            font-weight: 700;
+            margin: 0 0 14px;
+        }
+
+        h2 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 6px;
         }
 
         .field-grid {
@@ -183,131 +324,188 @@
             margin: 18px 0;
         }
 
-        .onboarding-action {
-            align-self: start;
-            display: grid;
-            gap: 18px;
-        }
-
         label {
-            color: var(--muted);
+            color: var(--ink-soft);
             display: block;
-            font-size: 0.88rem;
-            font-weight: 800;
+            font-size: 0.86rem;
+            font-weight: 600;
             margin-bottom: 7px;
         }
 
+        .input-group {
+            position: relative;
+        }
+
+        .input-icon {
+            color: var(--muted);
+            left: 13px;
+            pointer-events: none;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
         input {
-            background: #060d17;
-            border: 1px solid rgba(148, 180, 224, 0.22);
-            border-radius: 8px;
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: var(--radius-sm);
             color: var(--ink);
             outline: none;
-            padding: 12px 13px;
+            padding: 12px 13px 12px 38px;
+            transition: border-color 0.15s ease, box-shadow 0.15s ease;
             width: 100%;
         }
 
         input:focus {
             border-color: var(--accent);
-            box-shadow: 0 0 0 4px rgba(76, 201, 167, 0.14);
+            box-shadow: 0 0 0 4px rgba(109, 92, 232, 0.16);
         }
 
         input::placeholder {
-            color: rgba(241, 247, 255, 0.34);
+            color: rgba(18, 20, 31, 0.32);
         }
 
         .button-row {
-            align-items: center;
-            display: flex;
-            flex-wrap: wrap;
+            display: grid;
             gap: 10px;
         }
 
         .btn {
             align-items: center;
             border: 1px solid transparent;
-            border-radius: 8px;
+            border-radius: var(--radius-sm);
             cursor: pointer;
             display: inline-flex;
-            font-weight: 900;
+            font-weight: 700;
+            gap: 8px;
             justify-content: center;
-            min-height: 46px;
-            padding: 11px 15px;
+            min-height: 48px;
+            padding: 12px 18px;
+            transition: background 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
+        }
+
+        .btn:active:not(:disabled) {
+            transform: scale(0.99);
+        }
+
+        .btn-block {
+            justify-content: space-between;
+            max-width: 320px;
+            width: 100%;
+        }
+
+        .btn-block .btn-label {
+            align-items: center;
+            display: inline-flex;
+            gap: 8px;
         }
 
         .btn-primary {
-            background: var(--accent);
-            border-color: var(--accent);
-            color: #03120e;
+            background: var(--dark);
+            border-color: var(--dark);
+            color: #ffffff;
         }
 
-        .btn-primary:hover {
-            background: var(--accent-strong);
-            border-color: var(--accent-strong);
+        .btn-primary:hover:not(:disabled) {
+            background: var(--dark-strong);
+            border-color: var(--dark-strong);
         }
 
         .btn-secondary {
             background: transparent;
-            border-color: rgba(241, 247, 255, 0.24);
+            border-color: var(--line);
             color: var(--ink);
         }
 
-        .btn-secondary:hover {
-            background: rgba(241, 247, 255, 0.08);
+        .btn-secondary:hover:not(:disabled) {
+            background: var(--panel-soft);
         }
 
-        .status-box {
+        .status-row {
+            align-items: flex-start;
             background: var(--panel-soft);
             border: 1px solid var(--line);
-            border-radius: 8px;
+            border-radius: var(--radius-md);
             color: var(--muted);
+            display: flex;
+            font-size: 0.85rem;
+            gap: 10px;
             margin-top: 16px;
-            min-height: 48px;
-            padding: 12px;
+            padding: 12px 14px;
         }
 
-        .status-box.success {
-            background: rgba(76, 201, 167, 0.1);
-            border-color: rgba(76, 201, 167, 0.38);
-            color: var(--accent-strong);
+        .status-row .status-icon {
+            color: var(--muted);
+            margin-top: 1px;
         }
 
-        .status-box.error {
-            background: rgba(238, 120, 120, 0.1);
-            border-color: rgba(238, 120, 120, 0.34);
+        .status-row.success {
+            background: var(--success-soft);
+            border-color: rgba(22, 163, 74, 0.3);
+            color: #15803d;
+        }
+
+        .status-row.success .status-icon {
+            color: var(--success);
+        }
+
+        .status-row.error {
+            background: var(--danger-soft);
+            border-color: rgba(220, 38, 38, 0.3);
             color: var(--danger);
         }
 
-        .security-list {
+        .status-row.error .status-icon {
+            color: var(--danger);
+        }
+
+        .protect-grid {
             display: grid;
-            gap: 10px;
-            margin: 18px 0 0;
-            padding: 0;
+            gap: 18px;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
         }
 
-        .security-list li {
-            align-items: center;
-            background: rgba(241, 247, 255, 0.04);
-            border: 1px solid rgba(148, 180, 224, 0.12);
-            border-radius: 8px;
-            color: var(--muted);
+        .protect-item {
             display: flex;
-            gap: 10px;
-            list-style: none;
-            padding: 10px 12px;
+            flex-direction: column;
+            gap: 6px;
         }
 
-        .security-list li::before {
-            background: var(--accent);
-            border-radius: 999px;
-            content: "";
-            flex: 0 0 8px;
-            height: 8px;
-            width: 8px;
+        .protect-item .icon {
+            color: var(--ink);
+            margin-bottom: 2px;
         }
+
+        .protect-item strong {
+            font-size: 0.82rem;
+            font-weight: 700;
+        }
+
+        .protect-item .muted {
+            font-size: 0.74rem;
+            line-height: 1.35;
+        }
+
+        /* KYC verification drawer */
 
         .widget-panel {
+            background: var(--panel);
+            border-left: 1px solid var(--line);
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
             overflow: hidden;
+            position: fixed;
+            right: 0;
+            top: 0;
+            transform: translateX(100%);
+            transition: transform 0.32s cubic-bezier(0.22, 0.9, 0.32, 1);
+            width: clamp(320px, 25vw, 420px);
+            z-index: 100;
+        }
+
+        .widget-panel.is-open {
+            transform: translateX(0);
         }
 
         .widget-panel-header {
@@ -316,7 +514,7 @@
             display: flex;
             gap: 12px;
             justify-content: space-between;
-            padding: 14px 16px;
+            padding: 16px 18px;
         }
 
         .widget-panel-header h2 {
@@ -325,9 +523,9 @@
         }
 
         .widget-frame-wrap {
-            background: #050a12;
-            height: min(760px, calc(100vh - 180px));
-            min-height: 620px;
+            background: var(--panel-soft);
+            flex: 1 1 auto;
+            min-height: 0;
         }
 
         .widget-frame {
@@ -338,10 +536,9 @@
 
         .widget-placeholder {
             align-items: center;
-            background: linear-gradient(135deg, rgba(76, 201, 167, 0.14), rgba(5, 10, 18, 0.92));
             color: var(--muted);
             display: flex;
-            font-weight: 700;
+            font-weight: 600;
             height: 100%;
             justify-content: center;
             padding: 22px;
@@ -357,9 +554,9 @@
 
         .button-loader::before {
             animation: spin 0.8s linear infinite;
-            border: 2px solid rgba(3, 18, 14, 0.28);
+            border: 2px solid rgba(255, 255, 255, 0.35);
             border-radius: 50%;
-            border-top-color: #03120e;
+            border-top-color: #ffffff;
             content: "";
             height: 14px;
             width: 14px;
@@ -371,6 +568,14 @@
             }
         }
 
+        /* Dashboard */
+
+        .dashboard-shell {
+            margin: 0 auto;
+            max-width: 1180px;
+            padding: 40px 48px 64px;
+        }
+
         .dashboard-header {
             align-items: end;
             display: flex;
@@ -379,26 +584,87 @@
             margin-bottom: 18px;
         }
 
+        .quick-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+
+        .quick-action {
+            align-items: center;
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            color: var(--ink);
+            cursor: not-allowed;
+            display: inline-flex;
+            font-size: 0.86rem;
+            font-weight: 600;
+            gap: 8px;
+            padding: 10px 16px;
+        }
+
+        .quick-action .icon {
+            color: var(--accent-strong);
+        }
+
+        .verified-grid {
+            align-items: start;
+            display: grid;
+            gap: 18px;
+            grid-template-columns: minmax(0, 1fr) 380px;
+        }
+
         .account-card {
-            background:
-                linear-gradient(135deg, rgba(76, 201, 167, 0.24), rgba(98, 132, 202, 0.18)),
-                #0a111d;
-            padding: 22px;
+            background: var(--dark);
+            border-color: var(--dark);
+            color: #ffffff;
+            padding: 24px;
+        }
+
+        .balance-row {
+            align-items: flex-end;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            justify-content: space-between;
+            margin-bottom: 18px;
         }
 
         .balance-label {
-            color: var(--muted);
-            font-size: 0.85rem;
-            font-weight: 900;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.82rem;
+            font-weight: 700;
             text-transform: uppercase;
         }
 
         .balance {
-            font-size: clamp(2.3rem, 5vw, 4rem);
-            font-weight: 900;
-            letter-spacing: 0;
+            font-size: clamp(2.1rem, 4.6vw, 3.4rem);
+            font-weight: 800;
+            letter-spacing: -0.01em;
             line-height: 1;
-            margin: 8px 0 18px;
+            margin: 8px 0 0;
+        }
+
+        .sparkline {
+            flex-shrink: 0;
+            height: 40px;
+            width: 130px;
+        }
+
+        .sparkline .spark-stroke {
+            stroke: #ffffff;
+        }
+
+        .sparkline .stop-a {
+            stop-color: #ffffff;
+            stop-opacity: 0.35;
+        }
+
+        .sparkline .stop-b {
+            stop-color: #ffffff;
+            stop-opacity: 0;
         }
 
         .account-meta {
@@ -408,75 +674,141 @@
         }
 
         .metric {
-            background: rgba(3, 7, 13, 0.42);
-            border: 1px solid rgba(241, 247, 255, 0.12);
-            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            border-radius: var(--radius-md);
             padding: 12px;
         }
 
-        .metric span {
-            color: var(--muted);
-            display: block;
-            font-size: 0.78rem;
-            font-weight: 800;
+        .metric-head {
+            align-items: center;
+            color: rgba(255, 255, 255, 0.6);
+            display: flex;
+            font-size: 0.76rem;
+            font-weight: 700;
+            gap: 6px;
             margin-bottom: 4px;
+            text-transform: uppercase;
+        }
+
+        .metric-head .icon {
+            color: rgba(255, 255, 255, 0.75);
         }
 
         .metric strong {
-            font-size: 0.98rem;
+            color: #ffffff;
+            font-size: 0.96rem;
+            font-weight: 600;
         }
 
         .transaction-panel {
             padding: 18px;
         }
 
-        table {
-            border-collapse: collapse;
-            width: 100%;
+        .txn-list {
+            display: grid;
+            gap: 2px;
+            list-style: none;
+            margin: 0;
+            padding: 0;
         }
 
-        th,
-        td {
-            border-bottom: 1px solid var(--line);
-            padding: 13px 10px;
-            text-align: left;
+        .txn-row {
+            align-items: center;
+            border-radius: var(--radius-md);
+            display: flex;
+            gap: 12px;
+            padding: 11px 8px;
+            transition: background 0.15s ease;
         }
 
-        th {
+        .txn-row:hover {
+            background: var(--panel-soft);
+        }
+
+        .txn-icon {
+            align-items: center;
+            border-radius: 50%;
+            display: flex;
+            flex-shrink: 0;
+            height: 38px;
+            justify-content: center;
+            width: 38px;
+        }
+
+        .txn-icon-credit {
+            background: var(--success-soft);
+            color: #15803d;
+        }
+
+        .txn-icon-debit {
+            background: var(--warn-soft);
+            color: var(--warn);
+        }
+
+        .txn-info {
+            display: flex;
+            flex: 1 1 auto;
+            flex-direction: column;
+            gap: 2px;
+            min-width: 0;
+        }
+
+        .txn-info strong {
+            font-size: 0.94rem;
+            font-weight: 600;
+        }
+
+        .txn-date {
             color: var(--muted);
             font-size: 0.78rem;
-            text-transform: uppercase;
         }
 
-        td:last-child,
-        th:last-child {
-            text-align: right;
+        .txn-amount {
+            font-weight: 700;
+            white-space: nowrap;
         }
 
         .credit {
-            color: var(--accent-strong);
-            font-weight: 900;
+            color: var(--success);
         }
 
         .debit {
-            color: #f3d18a;
-            font-weight: 900;
+            color: var(--warn);
         }
 
         @media (max-width: 920px) {
+            .onboarding-shell {
+                grid-template-columns: 1fr;
+            }
 
-            .onboarding-grid,
+            .form-pane {
+                border-left: none;
+                border-top: 1px solid var(--line);
+            }
+
             .verified-grid {
                 grid-template-columns: 1fr;
             }
         }
 
         @media (max-width: 640px) {
-            .app-shell {
-                padding: 18px;
+            .page-header {
+                padding: 16px 20px;
             }
 
-            .topbar,
+            .hero-pane {
+                padding: 32px 20px 20px;
+            }
+
+            .form-pane {
+                padding: 28px 20px;
+            }
+
+            .dashboard-shell {
+                padding: 24px 20px 48px;
+            }
+
             .dashboard-header {
                 align-items: flex-start;
                 flex-direction: column;
@@ -486,150 +818,300 @@
                 grid-template-columns: 1fr;
             }
 
-            th,
-            td {
-                padding: 11px 6px;
+            .protect-grid {
+                grid-template-columns: 1fr;
             }
 
-            .hero-copy {
-                min-height: auto;
-                padding-bottom: 8px;
+            .sparkline {
+                display: none;
             }
 
-            .widget-frame-wrap {
-                height: calc(100vh - 180px);
-                min-height: 520px;
+            .widget-panel {
+                width: 100%;
             }
         }
     </style>
 </head>
 
 <body>
-    <main class="app-shell">
-        <header class="topbar">
-            <div class="brand-lockup">
-                <img class="brand-logo" src="assets/logo.png" alt="Bankify">
-                <div>
-                    <p class="brand-name">Bankify</p>
-                    <p class="brand-subtitle">Digital banking onboarding</p>
+    <svg class="icon-sprite hidden" aria-hidden="true">
+        <symbol id="icon-landmark" viewBox="0 0 24 24">
+            <path d="M2 9l10-6 10 6" />
+            <path d="M3 21h18" />
+            <path d="M5 21V9M9 21V9M15 21V9M19 21V9" />
+        </symbol>
+        <symbol id="icon-shield-check" viewBox="0 0 24 24">
+            <path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z" />
+            <path d="M9 12l2 2 4-4" />
+        </symbol>
+        <symbol id="icon-lock" viewBox="0 0 24 24">
+            <rect x="5" y="11" width="14" height="9" rx="2" />
+            <path d="M8 11V8a4 4 0 0 1 8 0v3" />
+        </symbol>
+        <symbol id="icon-check-circle" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="8.5" />
+            <path d="M9 12l2 2 4-4" />
+        </symbol>
+        <symbol id="icon-user" viewBox="0 0 24 24">
+            <circle cx="12" cy="8" r="3.5" />
+            <path d="M5 20c0-3.5 3-6 7-6s7 2.5 7 6" />
+        </symbol>
+        <symbol id="icon-mail" viewBox="0 0 24 24">
+            <rect x="3" y="5" width="18" height="14" rx="2" />
+            <path d="M3 7l9 6 9-6" />
+        </symbol>
+        <symbol id="icon-arrow-right" viewBox="0 0 24 24">
+            <path d="M5 12h14" />
+            <path d="M13 6l6 6-6 6" />
+        </symbol>
+        <symbol id="icon-badge" viewBox="0 0 24 24">
+            <circle cx="12" cy="10" r="6" />
+            <path d="M9 15.5L7.5 21 12 18.5 16.5 21 15 15.5" />
+        </symbol>
+        <symbol id="icon-hash" viewBox="0 0 24 24">
+            <path d="M9 4L7 20M17 4l-2 16M4 9h16M3 15h16" />
+        </symbol>
+        <symbol id="icon-trend-up" viewBox="0 0 24 24">
+            <path d="M4 16l6-6 4 4 6-8" />
+            <path d="M20 6h-5M20 6v5" />
+        </symbol>
+        <symbol id="icon-coffee" viewBox="0 0 24 24">
+            <path d="M5 9h12v6a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4V9z" />
+            <path d="M17 10h1.5a2.5 2.5 0 0 1 0 5H17" />
+            <path d="M8 3c0 1-1 1-1 2M12 3c0 1-1 1-1 2" />
+        </symbol>
+        <symbol id="icon-swap" viewBox="0 0 24 24">
+            <path d="M4 8h13M13 4l4 4-4 4" />
+            <path d="M20 16H7M11 12l-4 4 4 4" />
+        </symbol>
+        <symbol id="icon-send" viewBox="0 0 24 24">
+            <path d="M21 3L11 13" />
+            <path d="M21 3l-7 18-4-8-8-4 19-6z" />
+        </symbol>
+        <symbol id="icon-plus-circle" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="8.5" />
+            <path d="M12 8v8M8 12h8" />
+        </symbol>
+        <symbol id="icon-snowflake" viewBox="0 0 24 24">
+            <path d="M12 2v20M4.5 6.5l15 11M19.5 6.5l-15 11" />
+        </symbol>
+    </svg>
+
+    <header class="page-header">
+        <div class="brand-lockup">
+            <svg class="icon brand-icon"><use href="#icon-landmark"></use></svg>
+            <div>
+                <p class="brand-name">Bankify</p>
+                <p class="brand-subtitle">Digital banking onboarding</p>
+            </div>
+        </div>
+        <div class="trust-note">
+            <svg class="icon icon-sm"><use href="#icon-shield-check"></use></svg>
+            Secured by <strong>Hypersign ID</strong>
+        </div>
+    </header>
+
+    <section id="onboarding-form" class="onboarding-shell">
+        <div class="hero-pane">
+            <span class="eyebrow-pill">Open your account</span>
+            <h1>Start banking with verified identity.</h1>
+            <p class="muted">Create your Bankify profile and complete secure KYC before your demo dashboard is
+                unlocked.</p>
+
+            <div class="journey-row">
+                <div class="journey-step">
+                    <span class="journey-icon"><svg class="icon icon-md"><use href="#icon-user"></use></svg></span>
+                    <strong>Your details</strong>
+                    <span class="muted">Provide basic information</span>
+                </div>
+                <span class="journey-line"></span>
+                <div class="journey-step">
+                    <span class="journey-icon"><svg class="icon icon-md"><use href="#icon-shield-check"></use></svg></span>
+                    <strong>Identity verification</strong>
+                    <span class="muted">Secure verification with Hypersign</span>
+                </div>
+                <span class="journey-line"></span>
+                <div class="journey-step">
+                    <span class="journey-icon"><svg class="icon icon-md"><use href="#icon-landmark"></use></svg></span>
+                    <strong>Access your account</strong>
+                    <span class="muted">Your dashboard gets unlocked</span>
                 </div>
             </div>
-            <div class="trust-pill">Hypersign ID KYC</div>
-        </header>
 
-        <section id="onboarding-form" class="onboarding-grid">
-            <div class="hero-copy">
-                <p class="eyebrow">Open your account</p>
-                <h1>Start banking with verified identity.</h1>
-                <p class="muted">Create your Bankify profile and complete secure KYC before your demo dashboard is
-                    unlocked.</p>
+            <div class="notice-box">
+                <svg class="icon icon-md"><use href="#icon-lock"></use></svg>
+                <div>
+                    <strong>Your privacy is our priority.</strong>
+                    <p>We verify your identity securely and share only the result.</p>
+                </div>
             </div>
+        </div>
 
-            <div class="onboarding-action">
-                <aside id="customer-details-panel" class="panel" aria-label="Customer onboarding form">
+        <div class="form-pane">
+            <aside id="customer-details-panel" class="panel" aria-label="Customer onboarding form">
+                <div class="panel-section">
                     <h2>Customer Details</h2>
-                    <p class="muted">Your account is activated after Hypersign ID verification.</p>
+                    <p class="muted">Your account is activated after KYC verification.</p>
                     <div class="field-grid">
                         <div>
                             <label for="input-name">Name</label>
-                            <input id="input-name" type="text" autocomplete="name" placeholder="Ava Sharma" required>
+                            <div class="input-group">
+                                <svg class="icon icon-sm input-icon"><use href="#icon-user"></use></svg>
+                                <input id="input-name" type="text" autocomplete="name" placeholder="Ava Sharma"
+                                    required>
+                            </div>
                         </div>
                         <div>
                             <label for="input-email">Email</label>
-                            <input id="input-email" type="email" autocomplete="email" placeholder="ava@example.com"
-                                required>
+                            <div class="input-group">
+                                <svg class="icon icon-sm input-icon"><use href="#icon-mail"></use></svg>
+                                <input id="input-email" type="email" autocomplete="email" placeholder="ava@example.com"
+                                    required>
+                            </div>
                         </div>
                     </div>
                     <div class="button-row">
-                        <button id="btn-verify" class="btn btn-primary" type="button">Verify Identity with
-                            Hypersign</button>
+                        <button id="btn-verify" class="btn btn-primary btn-block" type="button">
+                            <span class="btn-label">
+                                <svg class="icon icon-sm"><use href="#icon-shield-check"></use></svg>
+                                Continue with Hypersign ID
+                            </span>
+                            <svg class="icon icon-sm"><use href="#icon-arrow-right"></use></svg>
+                        </button>
                         <button id="btn-restart" class="btn btn-secondary hidden" type="button">Restart Session</button>
                     </div>
-                    <div id="kyc-status" class="status-box">Enter your details to start KYC.</div>
-                    <ul class="security-list" aria-label="Bankify onboarding security">
-                        <li>Identity proof is requested through the Hypersign widget.</li>
-                        <li>Bankify receives only the verification result for this demo.</li>
-                        <li>Your dashboard opens after successful KYC.</li>
-                    </ul>
-                </aside>
-
-                <section id="widget-section" class="widget-panel hidden" aria-label="Identity verification widget">
-                    <div class="widget-panel-header">
-                        <h2>Hypersign ID</h2>
-                        <span class="muted">KYC verification</span>
+                    <div id="kyc-status" class="status-row">
+                        <svg class="icon icon-sm status-icon"><use href="#icon-shield-check"></use></svg>
+                        <span class="status-text">Your identity is verified securely through Hypersign ID. Bankify receives only the verification result.</span>
                     </div>
-                    <div id="kyc-widget-frame-wrap" class="widget-frame-wrap">
-                        <div id="kyc-widget-placeholder" class="widget-placeholder">Your identity verification will
-                            appear here.
-                        </div>
-                        <iframe id="kyc-widget-frame" class="widget-frame hidden" title="Hypersign ID Widget"
-                            allow="camera; microphone; fullscreen; clipboard-read; clipboard-write"></iframe>
-                    </div>
-                </section>
-            </div>
-        </section>
-
-        <section id="dashboard-view" class="hidden" aria-label="Bankify account dashboard">
-            <div class="dashboard-header">
-                <div>
-                    <p class="eyebrow">Verified Account</p>
-                    <h1 id="welcome-message">Welcome, Customer</h1>
                 </div>
-                <button id="btn-new-customer" class="btn btn-secondary" type="button">New Customer</button>
-            </div>
-
-            <div class="verified-grid">
-                <section class="account-card" aria-label="Account balance">
-                    <div class="balance-label">Available Balance</div>
-                    <div class="balance">$12,450.00</div>
-                    <div class="account-meta">
-                        <div class="metric">
-                            <span>Account</span>
-                            <strong>Everyday Checking</strong>
+                <div class="panel-divider"></div>
+                <div class="panel-section">
+                    <p class="panel-section-label">Your data stays protected</p>
+                    <div class="protect-grid">
+                        <div class="protect-item">
+                            <svg class="icon icon-md"><use href="#icon-lock"></use></svg>
+                            <strong>Identity verification</strong>
+                            <span class="muted">Verified by Hypersign ID</span>
                         </div>
-                        <div class="metric">
-                            <span>Status</span>
-                            <strong>KYC Verified</strong>
+                        <div class="protect-item">
+                            <svg class="icon icon-md"><use href="#icon-shield-check"></use></svg>
+                            <strong>Minimal data sharing</strong>
+                            <span class="muted">Only the verification result is shared</span>
                         </div>
-                        <div class="metric">
-                            <span>Routing</span>
-                            <strong>082-451</strong>
+                        <div class="protect-item">
+                            <svg class="icon icon-md"><use href="#icon-user"></use></svg>
+                            <strong>User consent</strong>
+                            <span class="muted">You stay in control of your data</span>
                         </div>
                     </div>
-                </section>
+                </div>
+            </aside>
 
-                <section class="transaction-panel" aria-label="Recent transactions">
-                    <h2>Recent Transactions</h2>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Description</th>
-                                <th>Amount</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Aug 10</td>
-                                <td>Salary</td>
-                                <td class="credit">+$5,000.00</td>
-                            </tr>
-                            <tr>
-                                <td>Aug 11</td>
-                                <td>Coffee Shop</td>
-                                <td class="debit">-$15.00</td>
-                            </tr>
-                            <tr>
-                                <td>Aug 12</td>
-                                <td>Online Transfer</td>
-                                <td class="debit">-$200.00</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </section>
+            <section id="widget-section" class="widget-panel hidden" aria-label="Identity verification widget">
+                <div class="widget-panel-header">
+                    <h2>Hypersign ID</h2>
+                    <span class="muted">KYC verification</span>
+                </div>
+                <div id="kyc-widget-frame-wrap" class="widget-frame-wrap">
+                    <div id="kyc-widget-placeholder" class="widget-placeholder">Your identity verification will
+                        appear here.
+                    </div>
+                    <iframe id="kyc-widget-frame" class="widget-frame hidden" title="Hypersign ID Widget"
+                        allow="camera; microphone; fullscreen; clipboard-read; clipboard-write"></iframe>
+                </div>
+            </section>
+        </div>
+    </section>
+
+    <section id="dashboard-view" class="dashboard-shell hidden" aria-label="Bankify account dashboard">
+        <div class="dashboard-header">
+            <div>
+                <p class="eyebrow-pill"><span class="dot"></span>Verified Account</p>
+                <h1 id="welcome-message">Welcome, Customer</h1>
             </div>
-        </section>
-    </main>
+            <button id="btn-new-customer" class="btn btn-secondary" type="button">New Customer</button>
+        </div>
+
+        <div class="quick-actions" aria-label="Quick actions (visual demo only)">
+            <button type="button" class="quick-action" disabled title="Demo dashboard — not wired up">
+                <svg class="icon icon-md"><use href="#icon-send"></use></svg>Send
+            </button>
+            <button type="button" class="quick-action" disabled title="Demo dashboard — not wired up">
+                <svg class="icon icon-md"><use href="#icon-plus-circle"></use></svg>Add Money
+            </button>
+            <button type="button" class="quick-action" disabled title="Demo dashboard — not wired up">
+                <svg class="icon icon-md"><use href="#icon-snowflake"></use></svg>Freeze Card
+            </button>
+        </div>
+
+        <div class="verified-grid">
+            <section class="account-card" aria-label="Account balance">
+                <div class="balance-row">
+                    <div>
+                        <div class="balance-label">Available Balance</div>
+                        <div class="balance">$12,450.00</div>
+                    </div>
+                    <svg class="sparkline" viewBox="0 0 120 40" preserveAspectRatio="none" aria-hidden="true">
+                        <defs>
+                            <linearGradient id="sparkFill" x1="0" y1="0" x2="0" y2="1">
+                                <stop class="stop-a" offset="0%"></stop>
+                                <stop class="stop-b" offset="100%"></stop>
+                            </linearGradient>
+                        </defs>
+                        <path d="M0,30 L15,26 L30,28 L45,16 L60,20 L75,10 L90,13 L105,5 L120,8 L120,40 L0,40 Z"
+                            fill="url(#sparkFill)"></path>
+                        <polyline class="spark-stroke" points="0,30 15,26 30,28 45,16 60,20 75,10 90,13 105,5 120,8"
+                            fill="none" stroke-width="2"></polyline>
+                    </svg>
+                </div>
+                <div class="account-meta">
+                    <div class="metric">
+                        <div class="metric-head"><svg class="icon icon-sm"><use href="#icon-user"></use></svg>Account</div>
+                        <strong>Everyday Checking</strong>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-head"><svg class="icon icon-sm"><use href="#icon-badge"></use></svg>Status</div>
+                        <strong>KYC Verified</strong>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-head"><svg class="icon icon-sm"><use href="#icon-hash"></use></svg>Routing</div>
+                        <strong>082-451</strong>
+                    </div>
+                </div>
+            </section>
+
+            <section class="transaction-panel" aria-label="Recent transactions">
+                <h2>Recent Transactions</h2>
+                <ul class="txn-list">
+                    <li class="txn-row">
+                        <span class="txn-icon txn-icon-credit"><svg class="icon icon-md"><use href="#icon-trend-up"></use></svg></span>
+                        <span class="txn-info">
+                            <strong>Salary</strong>
+                            <span class="txn-date">Aug 10</span>
+                        </span>
+                        <span class="txn-amount credit">+$5,000.00</span>
+                    </li>
+                    <li class="txn-row">
+                        <span class="txn-icon txn-icon-debit"><svg class="icon icon-md"><use href="#icon-coffee"></use></svg></span>
+                        <span class="txn-info">
+                            <strong>Coffee Shop</strong>
+                            <span class="txn-date">Aug 11</span>
+                        </span>
+                        <span class="txn-amount debit">-$15.00</span>
+                    </li>
+                    <li class="txn-row">
+                        <span class="txn-icon txn-icon-debit"><svg class="icon icon-md"><use href="#icon-swap"></use></svg></span>
+                        <span class="txn-info">
+                            <strong>Online Transfer</strong>
+                            <span class="txn-date">Aug 12</span>
+                        </span>
+                        <span class="txn-amount debit">-$200.00</span>
+                    </li>
+                </ul>
+            </section>
+        </div>
+    </section>
 
     <script>
         const demoIdConfig = window.DEMO_ID_CONFIG || {};
@@ -659,12 +1141,39 @@
         const verifyBtn = document.getElementById("btn-verify");
         const restartBtn = document.getElementById("btn-restart");
         const statusBox = document.getElementById("kyc-status");
+        const statusText = statusBox.querySelector(".status-text");
         const welcomeMessage = document.getElementById("welcome-message");
+        const stepOrder = ["details", "verify", "done"];
 
         window.addEventListener("message", handleWidgetMessage);
         verifyBtn.addEventListener("click", startIdentityVerification);
         restartBtn.addEventListener("click", restartVerificationSession);
         document.getElementById("btn-new-customer").addEventListener("click", resetOnboarding);
+
+        function setStep(name) {
+            const activeIndex = stepOrder.indexOf(name);
+
+            document.querySelectorAll(".tab-step").forEach((el) => {
+                const index = stepOrder.indexOf(el.dataset.step);
+                el.classList.toggle("is-active", index === activeIndex);
+                el.classList.toggle("is-done", index < activeIndex);
+            });
+        }
+
+        function openModal() {
+            widgetSection.classList.remove("hidden");
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => widgetSection.classList.add("is-open"));
+            });
+        }
+
+        function closeModal(onClosed) {
+            widgetSection.classList.remove("is-open");
+            window.setTimeout(() => {
+                widgetSection.classList.add("hidden");
+                if (onClosed) onClosed();
+            }, 280);
+        }
 
         async function startIdentityVerification() {
             const name = document.getElementById("input-name").value.trim();
@@ -749,8 +1258,6 @@
             }
 
             const targetUrl = buildWidgetUrl();
-            customerDetailsPanel.classList.add("hidden");
-            widgetSection.classList.remove("hidden");
             widgetPlaceholder.classList.add("hidden");
             widgetFrame.src = targetUrl;
             widgetFrame.classList.remove("hidden");
@@ -758,6 +1265,8 @@
             verifyBtn.disabled = true;
             restartBtn.classList.add("hidden");
             setKycStatus("Complete verification in the Hypersign panel.", "");
+            setStep("verify");
+            openModal();
         }
 
         function handleWidgetMessage(event) {
@@ -793,12 +1302,12 @@
             state.verified = true;
             state.widgetActive = false;
             resetWidgetFrame();
-            widgetSection.classList.add("hidden");
             verifyBtn.disabled = true;
             verifyBtn.innerText = "ID Verified";
             restartBtn.classList.add("hidden");
             setKycStatus(message, "success");
-            showDashboard();
+            setStep("done");
+            closeModal(showDashboard);
         }
 
         function showVerificationFailure(code, message) {
@@ -806,7 +1315,7 @@
             resetWidgetFrame();
             setKycStatus(message || getKycErrorMessage(code), "error");
             customerDetailsPanel.classList.remove("hidden");
-            widgetSection.classList.add("hidden");
+            closeModal();
             verifyBtn.disabled = false;
             restartBtn.classList.remove("hidden");
         }
@@ -857,7 +1366,6 @@
 
         function showDashboard() {
             onboardingForm.classList.add("hidden");
-            widgetSection.classList.add("hidden");
             welcomeMessage.innerText = `Welcome, ${state.customer.name}`;
             dashboardView.classList.remove("hidden");
         }
@@ -876,10 +1384,12 @@
             document.getElementById("input-name").value = "";
             document.getElementById("input-email").value = "";
             verifyBtn.disabled = false;
-            verifyBtn.innerText = "Verify Identity with Hypersign";
+            verifyBtn.innerHTML = '<span class="btn-label"><svg class="icon icon-sm"><use href="#icon-shield-check"></use></svg>Continue with Hypersign ID</span><svg class="icon icon-sm"><use href="#icon-arrow-right"></use></svg>';
             restartBtn.classList.add("hidden");
-            setKycStatus("Enter your details to start KYC.", "");
+            setKycStatus("Your identity is verified securely through Hypersign ID. Bankify receives only the verification result.", "");
+            setStep("details");
             customerDetailsPanel.classList.remove("hidden");
+            widgetSection.classList.remove("is-open");
             widgetSection.classList.add("hidden");
             dashboardView.classList.add("hidden");
             onboardingForm.classList.remove("hidden");
@@ -893,8 +1403,8 @@
         }
 
         function setKycStatus(message, type) {
-            statusBox.innerText = message;
-            statusBox.className = "status-box";
+            statusText.innerText = message;
+            statusBox.className = "status-row";
             if (type) statusBox.classList.add(type);
         }
 
@@ -902,16 +1412,18 @@
             if (!button) return;
 
             if (isLoading) {
-                if (!button.dataset.defaultText) {
-                    button.dataset.defaultText = button.innerText;
+                if (!button.dataset.defaultHtml) {
+                    button.dataset.defaultHtml = button.innerHTML;
                 }
                 button.disabled = true;
-                button.innerHTML = `<span class="button-loader">${loadingText || button.innerText}</span>`;
+                button.innerHTML = `<span class="button-loader">${loadingText || "Loading..."}</span>`;
                 return;
             }
 
             button.disabled = false;
-            button.innerText = button.dataset.defaultText || button.innerText;
+            if (button.dataset.defaultHtml) {
+                button.innerHTML = button.dataset.defaultHtml;
+            }
         }
     </script>
 </body>
