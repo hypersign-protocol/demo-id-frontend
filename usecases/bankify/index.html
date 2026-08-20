@@ -537,6 +537,26 @@
             margin: 0;
         }
 
+        .icon-btn {
+            align-items: center;
+            background: transparent;
+            border: 1px solid transparent;
+            border-radius: var(--radius-sm);
+            color: var(--muted);
+            cursor: pointer;
+            display: inline-flex;
+            flex-shrink: 0;
+            height: 32px;
+            justify-content: center;
+            transition: background 0.15s ease, color 0.15s ease;
+            width: 32px;
+        }
+
+        .icon-btn:hover {
+            background: var(--panel-soft);
+            color: var(--ink);
+        }
+
         .widget-frame-wrap {
             background: var(--panel-soft);
             flex: 1 1 auto;
@@ -910,6 +930,9 @@
         <symbol id="icon-snowflake" viewBox="0 0 24 24">
             <path d="M12 2v20M4.5 6.5l15 11M19.5 6.5l-15 11" />
         </symbol>
+        <symbol id="icon-x" viewBox="0 0 24 24">
+            <path d="M6 6l12 12M18 6L6 18" />
+        </symbol>
     </svg>
 
     <header class="page-header">
@@ -1026,8 +1049,13 @@
             <div id="widget-backdrop" class="widget-backdrop hidden" aria-hidden="true"></div>
             <section id="widget-section" class="widget-panel hidden" aria-label="Identity verification widget">
                 <div class="widget-panel-header">
-                    <h2>Hypersign ID</h2>
-                    <span class="muted">KYC verification</span>
+                    <div>
+                        <h2>Hypersign ID</h2>
+                        <span class="muted">KYC verification</span>
+                    </div>
+                    <button id="btn-close-widget" class="icon-btn" type="button" aria-label="Close verification panel">
+                        <svg class="icon icon-sm"><use href="#icon-x"></use></svg>
+                    </button>
                 </div>
                 <div id="kyc-widget-frame-wrap" class="widget-frame-wrap">
                     <div id="kyc-widget-placeholder" class="widget-placeholder">Your identity verification will
@@ -1153,6 +1181,7 @@
         const customerDetailsPanel = document.getElementById("customer-details-panel");
         const widgetSection = document.getElementById("widget-section");
         const widgetBackdrop = document.getElementById("widget-backdrop");
+        const closeWidgetBtn = document.getElementById("btn-close-widget");
         const widgetFrame = document.getElementById("kyc-widget-frame");
         const widgetPlaceholder = document.getElementById("kyc-widget-placeholder");
         const verifyBtn = document.getElementById("btn-verify");
@@ -1166,6 +1195,13 @@
         verifyBtn.addEventListener("click", startIdentityVerification);
         restartBtn.addEventListener("click", restartVerificationSession);
         document.getElementById("btn-new-customer").addEventListener("click", resetOnboarding);
+        closeWidgetBtn.addEventListener("click", cancelIdentityVerification);
+        widgetBackdrop.addEventListener("click", cancelIdentityVerification);
+        window.addEventListener("keydown", (event) => {
+            if (event.key === "Escape" && widgetSection.classList.contains("is-open")) {
+                cancelIdentityVerification();
+            }
+        });
 
         function setStep(name) {
             const activeIndex = stepOrder.indexOf(name);
@@ -1331,6 +1367,19 @@
             setKycStatus(message, "success");
             setStep("done");
             closeModal(showDashboard);
+        }
+
+        function cancelIdentityVerification() {
+            if (!widgetSection.classList.contains("is-open")) return;
+
+            state.widgetActive = false;
+            resetWidgetFrame();
+            closeModal();
+            verifyBtn.disabled = false;
+            restartBtn.classList.add("hidden");
+            customerDetailsPanel.classList.remove("hidden");
+            setKycStatus("Verification cancelled. You can start KYC again anytime.", "");
+            setStep("details");
         }
 
         function showVerificationFailure(code, message) {
