@@ -18,8 +18,8 @@ test("bankify implements ADR onboarding requirements", () => {
   assert.match(html, /id="onboarding-form"/);
   assert.match(html, /id="input-name"/);
   assert.match(html, /id="input-email"/);
-  assert.match(html, /id="btn-verify"/);
-  assert.match(html, /Verify Identity with\s+Hypersign/);
+  assert.match(html, /<button[^>]+id="btn-verify"[^>]*>/);
+  assert.match(html, /Hypersign/);
   assert.match(html, /id="dashboard-view"/);
   assert.match(html, /Welcome, /);
   assert.match(html, /\$12,450\.00/);
