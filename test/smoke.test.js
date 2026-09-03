@@ -28,6 +28,8 @@ test("bankify implements ADR onboarding requirements", () => {
   assert.match(html, /Online Transfer/);
   assert.match(html, /get-required-tokens-and-session-for-a-user/);
   assert.match(html, /usecase: "bankify"/);
+  assert.match(html, /widgetConfigId = data\.widgetConfigId \|\| ""/);
+  assert.match(html, /searchParams\.set\("configId", state\.widgetConfigId\)/);
   assert.match(html, /window\.addEventListener\("message", handleWidgetMessage\)/);
   assert.match(html, /VERIFICATION_SUCCESS/);
 });

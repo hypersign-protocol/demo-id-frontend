@@ -813,7 +813,8 @@
                 userBearer: ""
             },
             sessionId: "",
-            widgetUrl: demoIdConfig.widgetUrl || "https://verify.hypersign.id",
+            widgetConfigId: "",
+            widgetUrl: demoIdConfig.widgetUrl || "https://192.168.31.39:4999",
             demoIdBackendBaseURL: demoIdConfig.demoIdBackendBaseURL || "http://localhost:3007",
             verified: false,
             customer: {
@@ -1056,6 +1057,7 @@
             state.tokens.ssiAdmin = data.ssiAdminToken;
             state.tokens.userBearer = data.kycUserAccessToken || data.userBearerToken;
             state.sessionId = data.sessionId;
+            state.widgetConfigId = data.widgetConfigId || "";
             state.widgetUrl = normalizeWidgetUrl(data.widgetUrl || state.widgetUrl);
             state.customer.name = name;
             state.customer.email = email;
@@ -1193,6 +1195,9 @@
             url.searchParams.set("ssiAccessToken", state.tokens.ssiAdmin);
             url.searchParams.set("sessionId", state.sessionId);
             url.searchParams.set("kycUserAccessToken", state.tokens.userBearer);
+            if (state.widgetConfigId) {
+                url.searchParams.set("configId", state.widgetConfigId);
+            }
             return url.toString();
         }
 
