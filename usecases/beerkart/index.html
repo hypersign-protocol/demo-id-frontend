@@ -668,7 +668,8 @@
                 userBearer: ""
             },
             sessionId: "",
-            widgetUrl: demoIdConfig.widgetUrl || "https://verify.hypersign.id",
+            widgetConfigId: "",
+            widgetUrl: demoIdConfig.widgetUrl || "https://192.168.31.39:4999",
             demoIdBackendBaseURL: demoIdConfig.demoIdBackendBaseURL || "http://localhost:3007",
             widgetActive: false,
             closeTimer: null,
@@ -915,7 +916,7 @@
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ name, email })
+                body: JSON.stringify({ name, email, usecase: "beerkart" })
             });
             const data = await response.json();
 
@@ -927,6 +928,7 @@
             verificationState.tokens.ssiAdmin = data.ssiAdminToken;
             verificationState.tokens.userBearer = data.kycUserAccessToken || data.userBearerToken;
             verificationState.sessionId = data.sessionId;
+            verificationState.widgetConfigId = data.widgetConfigId || "";
             verificationState.widgetUrl = normalizeWidgetUrl(data.widgetUrl || verificationState.widgetUrl);
             verificationState.customer.name = name;
             verificationState.customer.email = email;
@@ -1076,6 +1078,9 @@
             url.searchParams.set("ssiAccessToken", verificationState.tokens.ssiAdmin);
             url.searchParams.set("sessionId", verificationState.sessionId);
             url.searchParams.set("kycUserAccessToken", verificationState.tokens.userBearer);
+            if (verificationState.widgetConfigId) {
+                url.searchParams.set("configId", verificationState.widgetConfigId);
+            }
             return url.toString();
         }
 
