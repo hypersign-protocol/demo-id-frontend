@@ -928,6 +928,7 @@
             verificationState.tokens.ssiAdmin = data.ssiAdminToken;
             verificationState.tokens.userBearer = data.kycUserAccessToken || data.userBearerToken;
             verificationState.sessionId = data.sessionId;
+            verificationState.widgetConfigId = data.widgetConfigId || "";
             verificationState.widgetUrl = normalizeWidgetUrl(data.widgetUrl || verificationState.widgetUrl);
             verificationState.customer.name = name;
             verificationState.customer.email = email;
